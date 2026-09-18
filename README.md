@@ -1,4 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project for a modular personal dashboard.
+
+## Google Sheets configuration
+
+The server-side Sheets helper in `src/lib/sheets.ts` uses a read-only Google service
+account. Add these variables to `.env.local` (never commit this file):
+
+```text
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
+GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+```
+
+Share each spreadsheet with the service account email as a Viewer. The helper accepts
+a spreadsheet ID and A1 range, maps the first row to field names, and lets callers
+parse each row into a typed value. Reads are cached for one hour by default.
+
+The Finance integration should use stable spreadsheet IDs and named ranges or
+sheet tabs rather than relying on a Google Drive folder path. Moving a sheet
+within Drive does not change its spreadsheet ID. Renaming a tab or changing
+column headers can affect consumers, so the parser should validate headers and
+the app should keep a small data-contract layer between Sheets and UI components.
+
+To inspect the configured Finance spreadsheet without changing it, run:
+
+```bash
+npm run inspect:finance
+```
+
+This discovers every tab and reports its dimensions, headers, populated-value
+counts, and basic inferred types. It intentionally does not print cell contents.
+
+## Project phases
+
+- [Phase 1: Foundation & Integration De-risking](./PHASE_1_MVP.md) — complete.
+- [Phase 2: Financial Dashboard](./PHASE_2_FINANCIAL_DASHBOARD.md) — next.
 
 ## Getting Started
 
