@@ -4,6 +4,8 @@ import { parseInvestmentTab } from "./investing";
 import { buildVacationDashboardModel } from "./vacations-model";
 import { parseVacationTab } from "./vacations";
 import { parseHousingWorkbook } from "./housing";
+import { calculateFire } from "./fire-model";
+import { getProjectionLabelIndexes } from "./fire-model";
 
 describe("finance parsers", () => {
   it("parses currency formats and rejects malformed values", () => {
@@ -76,5 +78,92 @@ describe("finance parsers", () => {
     expect(result.data[0].moveIn).toHaveLength(1);
     expect(result.data[0].items[0].value).toBe("1000");
     expect(result.data[0].monthly[0].total).toBe(1600);
+  });
+
+  it("calculates full FI and Coast FI milestones from editable assumptions", () => {
+    const result = calculateFire({
+      startingPortfolio: 250000,
+      annualSpending: 40000,
+      annualContributions: 20000,
+      realReturnPercent: 5,
+      withdrawalRatePercent: 4,
+      yearsToRetirement: 20,
+      retirementAge: 43,
+    }, 2026);
+
+    expect(result.fiNumber).toBe(1000000);
+    expect(result.coastTarget).toBeCloseTo(376889.48, 1);
+    expect(result.fiProgress).toBe(0.25);
+    expect(result.supportedAnnualSpending).toBe(10000);
+    expect(result.fireYear).toBe(2042);
+    expect(result.milestones.find((milestone) => milestone.target === 500000)?.year).toBe(2033);
+    expect(result.lowerProjection[1].portfolio).toBeLessThan(result.projection[1].portfolio);
+    expect(result.upperProjection[1].portfolio).toBeGreaterThan(result.projection[1].portfolio);
+    const growingContributions = calculateFire({
+      startingPortfolio: 250000,
+      annualSpending: 40000,
+      annualContributions: 20000,
+      realReturnPercent: 5,
+      withdrawalRatePercent: 4,
+      yearsToRetirement: 20,
+      retirementAge: 43,
+    }, 2026, 3);
+    expect(growingContributions.fireYear).toBeLessThan(result.fireYear!);
+    expect(result.coastProjection[1].portfolio).toBeGreaterThan(result.coastProjection[0].portfolio);
+    const coastReachedIndex = result.coastProjection.findIndex((point, index) => (
+      point.portfolio >= result.fiNumber / Math.pow(1.05, Math.max(0, 20 - index))
+    ));
+    expect(coastReachedIndex).toBeGreaterThan(0);
+    expect(result.coastContributionProjection[coastReachedIndex + 1]?.portfolio).toBe(
+      result.coastContributionProjection[coastReachedIndex]?.portfolio,
+    );
+    expect(result.coastRetirementSupportsFi).toBe(true);
+    expect(result.retirementSupportsFi).toBe(true);
+    expect(result.coastRetirementSupportedSpending).toBeGreaterThan(0);
+    const reachedCoast = calculateFire({
+      startingPortfolio: result.coastTarget,
+      annualSpending: 40000,
+      annualContributions: 20000,
+      realReturnPercent: 5,
+      withdrawalRatePercent: 4,
+      yearsToRetirement: 20,
+      retirementAge: 43,
+    }, 2026);
+    expect(reachedCoast.coastRetirementSupportsFi).toBe(true);
+    expect(reachedCoast.coastReachedYear).toBe(2026);
+    expect(reachedCoast.coastRetirementValue).toBeGreaterThanOrEqual(reachedCoast.fiNumber);
+    expect(getProjectionLabelIndexes(26)).toEqual([0, 5, 10, 15, 20, 25]);
+  });
+
+  it("only stops Coast FI contributions after the portfolio can reach FI by retirement", () => {
+    const result = calculateFire({
+      startingPortfolio: 0,
+      annualSpending: 40000,
+      annualContributions: 10000,
+      realReturnPercent: 5,
+      withdrawalRatePercent: 4,
+      yearsToRetirement: 20,
+      retirementAge: 43,
+    }, 2026);
+
+    expect(result.coastReachedYear).toBeNull();
+    expect(result.coastRetirementSupportsFi).toBe(false);
+    expect(result.retirementSupportsFi).toBe(false);
+    expect(result.coastContributionProjection[20].portfolio).toBe(200000);
+  });
+
+  it("marks FI as reached immediately when the portfolio is already at target", () => {
+    const result = calculateFire({
+      startingPortfolio: 1000000,
+      annualSpending: 40000,
+      annualContributions: 0,
+      realReturnPercent: 5,
+      withdrawalRatePercent: 4,
+      yearsToRetirement: 20,
+      retirementAge: 43,
+    }, 2026);
+
+    expect(result.fireYear).toBe(2026);
+    expect(result.projection[0].portfolio).toBe(1000000);
   });
 });

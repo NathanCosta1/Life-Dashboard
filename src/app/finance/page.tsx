@@ -31,6 +31,12 @@ const financeAreas = [
     href: "/finance/housing",
     status: "Available",
   },
+  {
+    title: "FIRE calculator",
+    description: "Explore Coast FI, full FI, and long-term portfolio scenarios.",
+    href: "/finance/fire",
+    status: "Available",
+  },
 ];
 
 export default function FinancePage() {

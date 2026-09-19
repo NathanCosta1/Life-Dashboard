@@ -95,14 +95,14 @@ whether the contribution pace is changing.
   - best month, average contribution, month coverage, and three-month rolling
     average;
   - warnings for malformed values and provided-total discrepancies.
-- [ ] Build the Investing route view with:
+- [x] Build the Investing route view with:
   - year selector synced to `year`;
   - view selector synced to `view=overview|accounts|detail`;
   - KPI cards for total invested, average month, best month, and account count;
   - stacked monthly contribution chart with rolling-average overlay;
   - account allocation cards and selected-month detail;
   - explicit empty-year, partial-year, warning, loading, and error states.
-- [ ] Keep account colors and chart series derived from normalized account names
+- [x] Keep account colors and chart series derived from normalized account names
   so new account columns require no UI changes.
 
 #### Investing UI proposal
@@ -204,6 +204,30 @@ Investing                                  [2026 v] [Overview v]
 - [x] Map the `HV - RVA` sections into move-in, setup/furnishing, and monthly
   recurring-cost contracts.
 - [x] Implement recurring-cost and monthly trend cards from the mapped sections.
+
+### Step 2G: FIRE calculator
+
+The FIRE calculator is a planning tool rather than a direct source report. It
+may be prefilled from Finance data, but all assumptions remain editable and
+no calculator changes are written back to Google Sheets.
+
+- [x] Add a standalone `/finance/fire` route linked from the Finance module
+  home.
+- [x] Prefill the calculator from the latest available net-worth value,
+  latest annual expenses, and annualized contributions from the latest
+  populated investing year. Label the source years in the UI.
+- [x] Keep assumptions explicit and editable: investable portfolio, annual
+  spending, annual contributions, real return, withdrawal rate, and years to
+  retirement.
+- [x] Calculate and display the FI number, full-FI progress, Coast FI target
+  and progress, portfolio-supported spending, and an estimated FI year.
+- [x] Add a projection chart in today’s dollars with a clearly labeled FI
+  target and a bounded 50-year horizon.
+- [x] Keep the calculation layer pure and test the core milestone math,
+  including already-at-FI portfolios.
+- [x] Explain that the projection is educational and assumes steady returns,
+  contributions, and spending; do not present it as financial advice or a
+  guaranteed forecast.
 
 ## Step 3: Reliability and UX
 

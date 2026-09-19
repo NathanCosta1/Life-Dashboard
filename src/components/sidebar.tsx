@@ -18,8 +18,8 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/95 px-6 backdrop-blur lg:hidden">
-        <Link href="/" className="font-semibold tracking-tight" onClick={() => setIsOpen(false)}>
+      <div className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-background/95 px-6 backdrop-blur lg:hidden">
+        <Link href="/" className="min-w-0 font-semibold tracking-tight" onClick={() => setIsOpen(false)}>
           Life Dashboard
         </Link>
         <button
@@ -27,7 +27,7 @@ export function Sidebar() {
           aria-expanded={isOpen}
           aria-controls="mobile-navigation"
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
-          className="rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="flex-none whitespace-nowrap rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           onClick={() => setIsOpen((open) => !open)}
         >
           {isOpen ? "Close" : "Menu"}

@@ -5,6 +5,8 @@ export { buildNetWorthDashboardModel } from "./net-worth-model";
 export type { NetWorthDashboardModel } from "./net-worth-model";
 export { buildCashFlowDashboardModel } from "./cash-flow-model";
 export type { CashFlowDashboardModel, CashFlowYear } from "./cash-flow-model";
+export { buildFireDashboardModel, calculateFire, getProjectionLabelIndexes } from "./fire-model";
+export type { FireDashboardModel, FireInputs, FireMilestone, FireProjectionPoint } from "./fire-model";
 export { parseHousingWorkbook } from "./housing";
 export { loadHousingData } from "./housing-data";
 export { buildHousingDashboardModel } from "./housing-model";
