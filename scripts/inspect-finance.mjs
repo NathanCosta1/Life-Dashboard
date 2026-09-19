@@ -1,14 +1,20 @@
 import { google } from "googleapis";
 
-const spreadsheetId = process.env.GOOGLE_SHEET_ID_VACATION_FINANCES;
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
-if (!spreadsheetId || !clientEmail || !privateKey) {
+if (!clientEmail || !privateKey) {
   throw new Error(
-    "Missing GOOGLE_SHEET_ID_VACATION_FINANCES, GOOGLE_SERVICE_ACCOUNT_EMAIL, or GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.",
+    "Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.",
   );
 }
+
+const sources = [
+  { key: "netWorth", envName: "GOOGLE_SHEET_ID_NET_WORTH" },
+  { key: "investing", envName: "GOOGLE_SHEET_ID_INVESTING" },
+  { key: "vacationFinances", envName: "GOOGLE_SHEET_ID_VACATION_FINANCES" },
+  { key: "housing", envName: "GOOGLE_SHEET_ID_HOUSING" },
+];
 
 const auth = new google.auth.JWT({
   email: clientEmail,
@@ -16,16 +22,6 @@ const auth = new google.auth.JWT({
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
 const sheets = google.sheets({ version: "v4", auth });
-
-const metadata = await sheets.spreadsheets.get({
-  spreadsheetId,
-  includeGridData: false,
-  fields: "properties(title),sheets(properties(title,index,gridProperties(rowCount,columnCount)))",
-});
-const tabs = metadata.data.sheets ?? [];
-if (tabs.length === 0) {
-  throw new Error("The configured spreadsheet has no readable tabs.");
-}
 
 function inferType(rows, columnIndex) {
   const samples = rows.map((row) => row[columnIndex] ?? "").filter(Boolean).slice(0, 20);
@@ -45,7 +41,7 @@ function inferType(rows, columnIndex) {
   return "text";
 }
 
-async function inspectTab(tab) {
+async function inspectTab(spreadsheetId, tab) {
   if (!tab.title) {
     return null;
   }
@@ -79,8 +75,35 @@ async function inspectTab(tab) {
   };
 }
 
+async function inspectSource(source) {
+  const spreadsheetId = process.env[source.envName];
+  if (!spreadsheetId) {
+    throw new Error(`Missing ${source.envName}.`);
+  }
+
+  const metadata = await sheets.spreadsheets.get({
+    spreadsheetId,
+    includeGridData: false,
+    fields: "properties(title),sheets(properties(title,index,gridProperties(rowCount,columnCount)))",
+  });
+  const tabs = metadata.data.sheets ?? [];
+  if (tabs.length === 0) {
+    throw new Error(`The configured ${source.envName} spreadsheet has no readable tabs.`);
+  }
+
+  return {
+    source: source.key,
+    environmentVariable: source.envName,
+    spreadsheetTitle: metadata.data.properties?.title ?? "(untitled)",
+    configuredTabCount: tabs.length,
+    tabs: (await Promise.all(
+      tabs.map(({ properties }) => inspectTab(spreadsheetId, properties ?? {})),
+    )).filter(Boolean),
+  };
+}
+
+const results = await Promise.all(sources.map(inspectSource));
 console.log(JSON.stringify({
-  spreadsheetTitle: metadata.data.properties?.title ?? "(untitled)",
-  configuredTabCount: tabs.length,
-  tabs: (await Promise.all(tabs.map(({ properties }) => inspectTab(properties ?? {})))).filter(Boolean),
+  inspectedSources: results.length,
+  sources: results,
 }, null, 2));

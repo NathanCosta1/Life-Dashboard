@@ -66,7 +66,7 @@ export function Sidebar() {
         <div className="mt-8 hidden border-t px-3 pt-5 lg:block">
           <p className="text-xs text-muted-foreground">Data source</p>
           <p className="mt-1 text-sm">Google Sheets</p>
-          <p className="mt-1 text-xs text-muted-foreground">Not connected</p>
+          <p className="mt-1 text-xs text-emerald-400">Connected</p>
         </div>
       </aside>
     </>

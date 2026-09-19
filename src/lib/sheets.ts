@@ -5,6 +5,7 @@ const SHEETS_READONLY_SCOPE = "https://www.googleapis.com/auth/spreadsheets.read
 const DEFAULT_REVALIDATE_SECONDS = 60 * 60;
 
 export type SheetRecord = Record<string, string>;
+export type SheetMatrix = string[][];
 
 export type SheetRowParser<T> = (row: SheetRecord, rowNumber: number) => T;
 
@@ -71,7 +72,59 @@ async function requestSheetValues(
     majorDimension: "ROWS",
   });
 
-  return (response.data.values ?? []) as string[][];
+  return (response.data.values ?? []) as SheetMatrix;
+}
+
+export async function readSheetMatrix({
+  spreadsheetId,
+  range,
+  revalidate = DEFAULT_REVALIDATE_SECONDS,
+  tags = [],
+}: Omit<ReadSheetOptions<unknown>, "parseRow">): Promise<SheetMatrix> {
+  if (!spreadsheetId.trim()) {
+    throw new Error("A Google Sheets spreadsheetId is required.");
+  }
+
+  if (!range.trim()) {
+    throw new Error("A Google Sheets range is required.");
+  }
+
+  if (!Number.isInteger(revalidate) || revalidate < 0) {
+    throw new Error("The Google Sheets revalidate value must be a non-negative integer.");
+  }
+
+  const cacheKey = ["google-sheet-matrix", spreadsheetId, range];
+  const getValues = unstable_cache(
+    async () => requestSheetValues(createSheetsClient(), spreadsheetId, range),
+    cacheKey,
+    {
+      revalidate,
+      tags: ["google-sheets", ...tags],
+    },
+  );
+
+  return getValues();
+}
+
+export async function listSheetTabs(spreadsheetId: string) {
+  if (!spreadsheetId.trim()) {
+    throw new Error("A Google Sheets spreadsheetId is required.");
+  }
+
+  const response = await createSheetsClient().spreadsheets.get({
+    spreadsheetId,
+    includeGridData: false,
+    fields: "sheets(properties(title,index,gridProperties(rowCount,columnCount)))",
+  });
+
+  return (response.data.sheets ?? [])
+    .map(({ properties }) => properties)
+    .filter((properties): properties is NonNullable<typeof properties> & { title: string } => Boolean(properties?.title))
+    .map((properties) => ({
+      title: properties.title,
+      rowCount: properties.gridProperties?.rowCount ?? null,
+      columnCount: properties.gridProperties?.columnCount ?? null,
+    }));
 }
 
 export async function readSheet<T>({

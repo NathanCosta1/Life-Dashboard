@@ -32,7 +32,7 @@ counts, and basic inferred types. It intentionally does not print cell contents.
 ## Project phases
 
 - [Phase 1: Foundation & Integration De-risking](./PHASE_1_MVP.md) — complete.
-- [Phase 2: Financial Dashboard](./PHASE_2_FINANCIAL_DASHBOARD.md) — next.
+- [Phase 2: Financial Dashboard](./PHASE_2_FINANCES.md) — next.
 
 ## Getting Started
 
