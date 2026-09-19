@@ -6,8 +6,30 @@ import { parseVacationTab } from "./vacations";
 import { parseHousingWorkbook } from "./housing";
 import { calculateFire } from "./fire-model";
 import { getProjectionLabelIndexes } from "./fire-model";
+import { parseBudgetTab } from "./budget";
+import { buildBudgetMetrics } from "./budget-model";
 
 describe("finance parsers", () => {
+  it("parses Nathan Planned rows with clean display labels", () => {
+    const result = parseBudgetTab([
+      ["Nathan"], ["Per Biweekly Pay Period"], ["", "Taxes", "990"],
+      ["", "401K*", "942.307692"], ["", "Fun / Savings****", "1018.846154"],
+      ["", "Pay*****", "4730.769231"], ["Maddy"], ["", "Pay", "999"],
+    ]);
+    expect(result.data.every((line) => line.person === "Nathan")).toBe(true);
+    expect(result.data).toHaveLength(4);
+    expect(result.data.find((line) => line.label.startsWith("Fun"))?.label).toBe("Fun");
+    expect(result.data.find((line) => line.label.startsWith("Fun"))?.ambiguous).toBeUndefined();
+    expect(result.data.find((line) => line.label.startsWith("Pay"))?.annual).toBeCloseTo(122999.999, 2);
+  });
+
+  it("calculates budget metrics from normalized monthly values", () => {
+    const lines = parseBudgetTab([["Nathan"], ["Per Biweekly Pay Period"], ["", "Taxes", "100"], ["", "Pay", "1000"], ["", "401K", "100"]]).data;
+    const metrics = buildBudgetMetrics(lines);
+    expect(metrics.income).toBeCloseTo(2166.67, 1);
+    expect(metrics.investing).toBeCloseTo(216.67, 1);
+    expect(metrics.savingsRate).toBeCloseTo(0.1, 2);
+  });
   it("parses currency formats and rejects malformed values", () => {
     expect(parseCurrency("$1,234.50")).toBe(1234.5);
     expect(parseCurrency("(42.00)")).toBe(-42);
@@ -165,5 +187,24 @@ describe("finance parsers", () => {
 
     expect(result.fireYear).toBe(2026);
     expect(result.projection[0].portfolio).toBe(1000000);
+  });
+
+  it("parses only Nathan's biweekly budget block and normalizes it", () => {
+    const result = parseBudgetTab([
+      ["Nathan", "Per Biweekly Pay Period"],
+      ["", "Taxes", "990"],
+      ["", "401K*", "942.307692"],
+      ["", "Car (Insurance + Maintenance)", "150"],
+      ["", "Fun / Savings", "1018.846154"],
+      ["", "Pay", "4730.769231"],
+      ["Maddy", "Per Biweekly Pay Period"],
+      ["", "Taxes", "482"],
+    ]);
+
+    expect(result.data).toHaveLength(5);
+    expect(result.data.find((line) => line.label === "Taxes")?.frequency).toBe("biweekly");
+    expect(result.data.find((line) => line.label === "Pay")?.monthly).toBeCloseTo(10250);
+    expect(result.data.some((line) => line.amount === 482)).toBe(false);
+    expect(result.data.find((line) => line.label === "Fun")?.ambiguous).toBeUndefined();
   });
 });

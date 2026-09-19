@@ -14,6 +14,7 @@ const sources = [
   { key: "investing", envName: "GOOGLE_SHEET_ID_INVESTING" },
   { key: "vacationFinances", envName: "GOOGLE_SHEET_ID_VACATION_FINANCES" },
   { key: "housing", envName: "GOOGLE_SHEET_ID_HOUSING" },
+  { key: "budget", envName: "GOOGLE_SHEET_ID_BUDGET" },
 ];
 
 const auth = new google.auth.JWT({

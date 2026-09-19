@@ -58,6 +58,15 @@ export const financeSources: Record<SourceName, FinanceSourceConfig> = {
     revalidateSeconds: 6 * 60 * 60,
     status: "semi-structured",
   },
+  budget: {
+    name: "budget",
+    environmentVariable: "GOOGLE_SHEET_ID_BUDGET",
+    defaultTabs: ["Planned"],
+    ranges: { planned: "'Planned'!A1:Z100" },
+    discoveryRange: "A1:Z100",
+    revalidateSeconds: 60 * 60,
+    status: "semi-structured",
+  },
 };
 
 export function getSpreadsheetId(source: SourceName): string {

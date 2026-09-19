@@ -1,4 +1,4 @@
-export type SourceName = "netWorth" | "investing" | "vacationFinances" | "housing";
+export type SourceName = "netWorth" | "investing" | "vacationFinances" | "housing" | "budget";
 
 export type SourceLocation = {
   source: SourceName;
@@ -80,3 +80,20 @@ export type HousingMonthlyCost = {
   categories: Record<string, number | null>;
   location: SourceLocation;
 };
+
+export type BudgetFrequency = "biweekly" | "monthly" | "annual" | "unknown";
+export type BudgetCategory = "income" | "tax" | "housing" | "transportation" | "food" | "household" | "subscriptions" | "flexible-spending" | "retirement-investing" | "other-investing" | "unallocated" | "unknown";
+export type BudgetLine = {
+  label: string;
+  person: "Nathan";
+  amount: number;
+  frequency: BudgetFrequency;
+  category: BudgetCategory;
+  monthly: number;
+  annual: number;
+  rowNumber: number;
+  note?: string;
+  ambiguous?: boolean;
+};
+export type BudgetData = { lines: BudgetLine[]; issues: ValidationIssue[]; source: { tab: string; frequency: BudgetFrequency } };
+export type BudgetMetrics = { income: number; taxes: number; spending: number; investing: number; freeToInvest: number; savingsRate: number };

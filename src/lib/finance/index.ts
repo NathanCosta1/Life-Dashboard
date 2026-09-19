@@ -35,6 +35,10 @@ export {
   parseYear,
 } from "./parsers";
 export { financeSources, getSourceTag, getSpreadsheetId } from "./sources";
+export { parseBudgetTab, classifyBudgetLabel } from "./budget";
+export { loadBudgetData } from "./budget-data";
+export { buildBudgetMetrics, buildBudgetDashboardModel, budgetLineWithCategory } from "./budget-model";
+export type { BudgetData } from "./types";
 export type {
   AnnualMetricPoint,
   HousingSnapshot,
@@ -47,4 +51,8 @@ export type {
   SourceName,
   ValidationIssue,
   VacationTrip,
+  BudgetCategory,
+  BudgetFrequency,
+  BudgetLine,
+  BudgetMetrics,
 } from "./types";

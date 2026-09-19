@@ -188,18 +188,23 @@ export function FireDashboard({ model }: { model: FireDashboardModel }) {
   }, [model.defaults]);
   useEffect(() => {
     if (!urlInitialized) return;
-    const params = new URLSearchParams({
-      p: String(inputs.startingPortfolio),
-      s: String(inputs.annualSpending),
-      c: String(inputs.annualContributions),
-      r: String(inputs.realReturnPercent),
-      w: String(inputs.withdrawalRatePercent),
-      y: String(inputs.yearsToRetirement),
-      a: String(inputs.retirementAge),
-      g: contributionsGrow ? "1" : "0",
-      m: showMonthlyValues ? "1" : "0",
-      t: retirementPlanningEnabled ? "1" : "0",
+    const params = new URLSearchParams();
+    const defaults = model.defaults;
+    const values: Array<[string, number, number]> = [
+      ["p", inputs.startingPortfolio, defaults.startingPortfolio],
+      ["s", inputs.annualSpending, defaults.annualSpending],
+      ["c", inputs.annualContributions, defaults.annualContributions],
+      ["r", inputs.realReturnPercent, defaults.realReturnPercent],
+      ["w", inputs.withdrawalRatePercent, defaults.withdrawalRatePercent],
+      ["y", inputs.yearsToRetirement, defaults.yearsToRetirement],
+      ["a", inputs.retirementAge, defaults.retirementAge],
+    ];
+    values.forEach(([key, value, defaultValue]) => {
+      if (value !== defaultValue) params.set(key, String(value));
     });
+    if (contributionsGrow) params.set("g", "1");
+    if (showMonthlyValues) params.set("m", "1");
+    if (!retirementPlanningEnabled) params.set("t", "0");
     const nextUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.replaceState(null, "", nextUrl);
     const timeout = window.setTimeout(() => setShareUrl(window.location.href), 0);

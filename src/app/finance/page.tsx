@@ -2,6 +2,12 @@ import Link from "next/link";
 
 const financeAreas = [
   {
+    title: "Budget",
+    description: "Model Nathan's Planned budget, savings rate, and free cash flow.",
+    href: "/finance/budget",
+    status: "Available",
+  },
+  {
     title: "Investing",
     description: "Explore monthly contributions, account allocation, and contribution pace.",
     href: "/finance/investing",
