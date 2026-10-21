@@ -148,9 +148,11 @@ label. Suggested initial rules:
 - subscriptions -> subscriptions
 - Fun / Savings -> flexible-spending with an ambiguity flag
 
-Do not silently classify a combined `Fun / Savings / 401K` value as entirely
-spending or entirely investing. Represent it as an unresolved mixed bucket
-until the user assigns a split.
+The source combines Fun and Savings in a single line. For the planning UI,
+initialize the full source amount under Fun and initialize Savings at `$0`,
+per the confirmed user choice. These are independent scenario categories after
+initialization; do not show a mixed bucket or imply that the source provides a
+split.
 
 ### 3. Keep source values and scenario values separate
 
@@ -168,7 +170,7 @@ The Budget page should have two layers:
 The UI should offer a reset action:
 
 ```text
-Reset to sheet values
+Reset to starting plan
 ```
 
 The scenario should be serializable in the URL, using compact query parameters
@@ -189,13 +191,7 @@ Finance / Budget
 Budget
 Interactive monthly cash-flow plan
 
-[Source period: Biweekly] [View: Monthly v] [Reset to sheet values]
-```
-
-Show a small source-context note:
-
-```text
-Based on the Planned tab. Values are converted from biweekly pay periods.
+[View: Monthly v] [Reset to starting plan]
 ```
 
 ### Summary cards
@@ -212,20 +208,18 @@ Definitions:
 
 ```text
 monthly income = all income lines
-monthly core spending = taxes + classified living expenses,
-                       excluding investing and unallocated money
-monthly investing = retirement investing + other investing
-free to invest = income - taxes - spending - investing
-savings rate = investing / income
+core outflows = taxes + fun + living + car + groceries
+investing = employee 401(k), ESPP, Roth IRA, and taxable brokerage contributions
+free to invest = income - taxes - fun - savings - living - car - groceries - investing
+savings rate = (investing + savings) / income
 ```
 
-Taxes should be displayed separately in the flow and included in the cash
-outflow, but the card labels should make clear whether “spending” includes
-taxes. Recommended copy:
+Taxes should be displayed separately in the flow and included in core
+outflows. Recommended copy:
 
 ```text
 Core outflows
-Includes taxes and classified living expenses
+Taxes + planned categories
 ```
 
 If the result is negative:
@@ -248,50 +242,51 @@ Build the flow from normalized scenario nodes and links:
 Household income
   -> Nathan income
 
-Nathan income
+Income
   -> Taxes
-  -> Household spending categories
-  -> Retirement investing
-  -> Other investing
-  -> Unallocated
+  -> Investing
+  -> Fun
+  -> Savings
+  -> Living
+  -> Car
+  -> Groceries
+  -> Unassigned
 ```
 
-The first implementation may aggregate both people into household-level
-categories if individual-to-category ownership makes the graph too noisy.
-Person-level toggling can be added later.
+Only the Nathan budget block is loaded. The display uses broad planning
+categories rather than mirroring sheet rows.
 
 Node groups should have stable colors:
 
 - Income: cyan/blue
-- Taxes: slate
-- Core spending: amber
-- Flexible spending: purple
-- Retirement investing: green
-- Other investing: teal
+- Taxes: amber
+- Living: purple
+- Car: orange
+- Groceries: teal
+- Fun: pink
+- Savings: lime
+- Investing: green
 - Unallocated/free to invest: emerald
-- Unknown/ambiguous: orange
 
 ### Interaction behavior
 
 The Sankey must be more than a static picture:
 
 - Hover a node to highlight connected links.
-- Hover a link to show source, destination, amount, frequency, and percent of
-  source.
-- Click a category to focus its corresponding editor rows.
+- Hover a link to show its destination and amount.
+- Keep category descriptions in the destination nodes and scenario editor.
 - Use keyboard-focusable controls for category values; do not make the SVG the
-  only way to edit data.
+  only way to edit data. Keep the SVG accessible with a concise diagram label.
 - Keep the chart usable when a category is zero.
 - Show an explicit negative/overallocated state instead of drawing negative
   Sankey widths.
 
-Recommended link tooltip:
+Recommended destination labels:
 
 ```text
-Rent -> Core spending
-$1,993/month
-42% of classified household outflows
-Source: Nathan, biweekly budget
+Investing
+401(k) + match + Roth IRA + taxable brokerage
+$X / month
 ```
 
 ## Editable budget controls
@@ -299,23 +294,14 @@ Source: Nathan, biweekly budget
 Place an editor below or beside the Sankey:
 
 ```text
-Income
-  Nathan pay                         $X / month
-Taxes
-  Nathan taxes                       $X / month
-
-Core spending
-  Rent / housing                     $X / month
-  Car / transportation               $X / month
-  Food                               $X / month
-  Household                          $X / month
-  Subscriptions                      $X / month
-  Flexible / fun                     $X / month
-
-Investing
-  Nathan 401(k)                      $X / month
-  Nathan ESPP                        $X / month
-  Unassigned free-to-invest          $X / month
+Income       Take-home pay                              $X / month
+Taxes        Income taxes and payroll deductions        $X / month
+Investing    401(k) + match + Roth IRA + taxable brokerage $X / month
+Fun          Dining, hobbies, discretionary spending    $X / month
+Savings      Cash savings and short-term goals          $X / month
+Living       Internet, rent, fees, trash                $X / month
+Car          Maintenance + gas                          $X / month
+Groceries    Food at home                               $X / month
 ```
 
 Use the same text/inputMode approach as the FIRE calculator:
@@ -327,21 +313,10 @@ Use the same text/inputMode approach as the FIRE calculator:
 - Preserve the original biweekly source amount in a detail tooltip or
   expandable row.
 
-For the mixed Nathan source label, expose its ambiguity:
-
-```text
-Nathan "Fun / Savings"
-  Spending share                     [ 50% ]
-  Investing share                    [ 50% ]
-```
-
-If the split is not confirmed, label it:
-
-```text
-Mixed source bucket — scenario split
-```
-
-Do not imply that the sheet itself provides that split.
+Categories are scenario-level controls, not editable source rows. Groceries
+and Savings start at `$0` when there is no source value. The combined source
+Fun/Savings amount starts under Fun, with no ambiguity badge or spreadsheet
+label in the UI.
 
 ## Free-to-invest calculations
 
@@ -351,9 +326,27 @@ The page should answer the user’s likely action question directly:
 Free to invest =
 total income
 - taxes
-- classified spending
-- current investing
+- planned investing
+- savings
+- fun, living, car, and groceries
 ```
+
+### Workplace benefit estimates
+
+Provide a separate, collapsible benefits panel that does not distort household
+cash flow:
+
+- 401(k) match estimate defaults to the sheet-note value of 7.5% of eligible
+  annual pay. Estimate the employer amount as the lesser of annual employee
+  contributions and eligible pay × match rate.
+- ESPP discount value defaults to a 15% purchase discount and is calculated as
+  annual ESPP contributions × discount / (1 - discount).
+- Include a checked “Roth IRA maxed for the year” status; do not hard-code the
+  statutory limit or count this toggle as an additional dollar contribution.
+- Put formulas in named pure functions and assumptions in typed configuration
+  so the JSX only renders inputs and results.
+- Clearly label these as estimates from the starting budget values and keep
+  them out of the Sankey/free-to-invest calculations.
 
 Two related numbers should be shown:
 
@@ -641,7 +634,11 @@ It is not a transaction ledger.
 - Ignore blank rows and notes as line items.
 - Preserve source row numbers.
 - Preserve source notes.
-- Classify combined `Fun / Savings` as ambiguous.
+- Initialize the combined source Fun/Savings amount under Fun and Savings at
+  zero.
+- Map investments, living, and car values into broad categories; default
+  groceries to zero.
+- Ensure category editor and Sankey never expose source row labels or numbers.
 - Treat `Total Expenses` as a check, not an ordinary expense.
 - Handle formulas and formula-rendered totals.
 - Report malformed and missing amounts.
@@ -702,7 +699,9 @@ Defer until after the first release:
 - The UI makes biweekly-to-monthly conversion visible.
 - The Sankey balances or clearly reports an overallocated budget.
 - Free-to-invest updates immediately when editable values change.
-- Ambiguous mixed buckets are visibly marked and editable.
+- The combined source Fun/Savings amount initializes under Fun; Savings is a
+  separate editable category initialized at zero.
+- Broad category labels and descriptions are independent of sheet row names.
 - FIRE handoff values are explicit and reversible.
 - Shared scenario URLs restore all editable state.
 - No source credentials or spreadsheet IDs are exposed to the client.

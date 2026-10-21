@@ -20,6 +20,20 @@ within Drive does not change its spreadsheet ID. Renaming a tab or changing
 column headers can affect consumers, so the parser should validate headers and
 the app should keep a small data-contract layer between Sheets and UI components.
 
+The optional FIRE AI overview uses OpenRouter to generate a short overview
+automatically for the current scenario, with a manual regenerate option.
+Configure its credentials on the server (in `.env.local` for local development
+and deployment secrets in production); never expose the key to client code:
+
+```text
+OPENROUTER_API_KEY=your-openrouter-key
+OPENROUTER_MODEL=provider/model
+```
+
+Provider usage may incur cost. Without these settings, the ordinary FIRE
+calculator remains available and the AI overview reports that it is not
+configured.
+
 To inspect the configured Finance spreadsheet without changing it, run:
 
 ```bash

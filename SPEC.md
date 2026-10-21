@@ -13,6 +13,7 @@ Instead of opening disparate spreadsheets, this application transforms raw track
    - **Frontend & Hosting:** Next.js deployed on Vercel's Hobby (free) tier.
    - **Database & Storage:** Google Sheets / Google Drive API acts as the headless backend and single source of truth. No hosted databases (PostgreSQL, Supabase, etc.) to manage or pay for.
    - **Authentication/Security:** Google Service Account with read-only access to specific sheet IDs via environment variables.
+   - **Optional AI:** OpenRouter may be used for concise scenario summaries. Provider usage can incur cost; show a clear unavailable state when its server-side credentials are absent, and keep provider credentials server-only.
 
 2. **Extreme Modularity ("Plug-and-Play" Modules):**
    - Built as a modular monolith. Each domain (`finance`, `recipes`, `fitness`, `career`) lives in its own isolated route directory.
@@ -66,8 +67,43 @@ Instead of opening disparate spreadsheets, this application transforms raw track
 ▼
 [ UI Components (Charts, Metric Cards, Calculators) ]
 
+Optional AI overview flow:
+
+```text
+[ FIRE client calculator ]
+  -- minimal validated scenario summary -->
+[ POST /api/finance/fire/overview ]
+  -- server-only prompt + OPENROUTER_API_KEY -->
+[ OpenRouter chat-completions API ]
+  -- short plain-text qualitative overview -->
+[ FIRE client overview card ]
+```
+
 - **Generic Sheet Utility:** A centralized utility in `/src/lib/sheets.ts` that accepts a `spreadsheetId` and `range`, parses rows into structured JSON, and enforces TypeScript types.
 - **Caching & Performance:** Leverage Next.js `fetch` cache and `revalidate` tags (e.g., revalidate data every 1–6 hours or on-demand via a manual "Refresh Data" button) to stay well within Google API rate limits.
+- **AI Boundary:** External AI calls must go through server Route Handlers. Never expose provider keys to client components, include secrets in URLs, or send raw sheets/account-level data when an aggregate scenario summary is sufficient. Validate and bound inputs, set provider timeouts/output limits, avoid logging financial payloads, and surface provider failures without breaking the underlying calculator.
+- **AI Cost & Persistence:** The FIRE overview generates for the loaded scenario and after edits settle, with a manual regenerate control. Provider usage may incur cost. Do not persist prompts or responses unless a future feature explicitly defines retention and consent.
+
+### FIRE AI overview
+
+The FIRE calculator may offer an on-demand qualitative overview beneath its
+main projection chart. The calculator's deterministic model remains
+authoritative for numeric outcomes; AI can only contextualize the current
+scenario, point out an assumption/risk, and suggest a sensitivity to inspect.
+The implementation contract, prompt behavior, request fields, privacy rules,
+and UI states are documented in [FIRE_CALCULATOR.md](./FIRE_CALCULATOR.md).
+
+Server configuration:
+
+```text
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=provider/model
+```
+
+These variables belong in local ignored environment configuration and the
+deployment's secret settings. They must never be committed or passed to the
+browser. The model is selected by server configuration rather than hard-coded
+into the UI.
 
 ---
 

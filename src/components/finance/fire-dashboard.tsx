@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useMemo } from "react";
 import { calculateFire, getProjectionLabelIndexes, type FireDashboardModel, type FireInputs } from "@/lib/finance/fire-model";
 
@@ -136,9 +136,30 @@ export function FireDashboard({ model }: { model: FireDashboardModel }) {
   const [contributionsGrow, setContributionsGrow] = useState(false);
   const [showMonthlyValues, setShowMonthlyValues] = useState(false);
   const [retirementPlanningEnabled, setRetirementPlanningEnabled] = useState(true);
+  const [overview, setOverview] = useState<{ signature: string; text: string } | null>(null);
+  const [overviewError, setOverviewError] = useState("");
+  const [overviewLoading, setOverviewLoading] = useState(false);
+  const overviewRequestId = useRef(0);
+  const activeOverviewRequest = useRef<AbortController | null>(null);
   const [urlInitialized, setUrlInitialized] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
   const result = useMemo(() => calculateFire(inputs, model.asOfYear, contributionsGrow ? 3 : 0), [inputs, model.asOfYear, contributionsGrow]);
+  const overviewScenario = useMemo(() => ({
+    startingPortfolio: inputs.startingPortfolio,
+    annualSpending: inputs.annualSpending,
+    annualContributions: inputs.annualContributions,
+    realReturnPercent: inputs.realReturnPercent,
+    withdrawalRatePercent: inputs.withdrawalRatePercent,
+    contributionsGrow,
+    yearsToRetirement: inputs.yearsToRetirement,
+    retirementPlanningEnabled,
+    fiNumber: result.fiNumber,
+    fireYear: result.fireYear,
+    fiProgress: result.fiProgress,
+    retirementSupportsFi: retirementPlanningEnabled ? result.retirementSupportsFi : null,
+    retirementProjectionValue: retirementPlanningEnabled ? result.retirementProjectionValue : null,
+  }), [contributionsGrow, inputs, result, retirementPlanningEnabled]);
+  const overviewSignature = JSON.stringify(overviewScenario);
   const scenarios = useMemo(() => [
     { label: "Spend $5K less", detail: "Annual spending", result: calculateFire({ ...inputs, annualSpending: Math.max(0, inputs.annualSpending - 5000) }, model.asOfYear), isBarista: false, isCoast: false },
     { label: "Spend $10K more in retirement", detail: "Retirement spending only", result: calculateFire({ ...inputs, annualSpending: inputs.annualSpending + 10000 }, model.asOfYear), isBarista: false, isCoast: false },
@@ -159,6 +180,62 @@ export function FireDashboard({ model }: { model: FireDashboardModel }) {
   const update = (key: keyof FireInputs) => (value: number) => setInputs((current) => ({ ...current, [key]: value }));
   const updateRetirementYears = (years: number) => setInputs((current) => ({ ...current, yearsToRetirement: years, retirementAge: currentAge + years }));
   const updateRetirementAge = (age: number) => setInputs((current) => ({ ...current, retirementAge: age, yearsToRetirement: Math.max(0, age - currentAge) }));
+  const generateOverview = useCallback(async (
+    scenario: typeof overviewScenario,
+    signature: string,
+    controller: AbortController,
+  ) => {
+    activeOverviewRequest.current?.abort();
+    activeOverviewRequest.current = controller;
+    const requestId = ++overviewRequestId.current;
+    setOverviewLoading(true);
+    setOverviewError("");
+    try {
+      const response = await fetch("/api/finance/fire/overview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        signal: controller.signal,
+        body: JSON.stringify(scenario),
+      });
+      const payload: unknown = await response.json();
+      if (typeof payload !== "object" || payload === null) {
+        throw new Error("The AI overview returned an invalid response.");
+      }
+      if (!response.ok) {
+        const message = "error" in payload && typeof payload.error === "string"
+          ? payload.error
+          : "The AI overview could not be generated. Please try again.";
+        throw new Error(message);
+      }
+      const text = "overview" in payload && typeof payload.overview === "string" ? payload.overview.trim() : "";
+      if (!text) throw new Error("The AI overview returned no usable text. Please try again.");
+      if (requestId === overviewRequestId.current) setOverview({ signature, text });
+    } catch (error) {
+      if (controller.signal.aborted || requestId !== overviewRequestId.current) return;
+      setOverviewError(error instanceof Error ? error.message : "The AI overview could not be generated. Please try again.");
+    } finally {
+      if (requestId === overviewRequestId.current) {
+        activeOverviewRequest.current = null;
+        setOverviewLoading(false);
+      }
+    }
+  }, []);
+  useEffect(() => {
+    if (!urlInitialized) return;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      void generateOverview(overviewScenario, overviewSignature, controller);
+    }, 400);
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+      if (activeOverviewRequest.current === controller) {
+        overviewRequestId.current += 1;
+        activeOverviewRequest.current = null;
+      }
+    };
+  }, [generateOverview, overviewScenario, overviewSignature, urlInitialized]);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const numberParam = (key: string, fallback: number) => {
@@ -209,7 +286,7 @@ export function FireDashboard({ model }: { model: FireDashboardModel }) {
     window.history.replaceState(null, "", nextUrl);
     const timeout = window.setTimeout(() => setShareUrl(window.location.href), 0);
     return () => window.clearTimeout(timeout);
-  }, [contributionsGrow, inputs, retirementPlanningEnabled, showMonthlyValues, urlInitialized]);
+  }, [contributionsGrow, inputs, model.defaults, retirementPlanningEnabled, showMonthlyValues, urlInitialized]);
   const workingMonthFreedom = inputs.annualSpending > 0 ? (inputs.annualContributions / 12) / (inputs.annualSpending / 12) : 0;
   const sourceParts = [
     model.sourceSummary.portfolioYear && `portfolio ${model.sourceSummary.portfolioYear}`,
@@ -261,6 +338,15 @@ export function FireDashboard({ model }: { model: FireDashboardModel }) {
           <div className="mt-5"><ProjectionChart projection={result.projection} lowerProjection={result.lowerProjection} upperProjection={result.upperProjection} fiNumber={result.fiNumber} fireYear={result.fireYear} markerYear={result.fireYear} realReturnPercent={inputs.realReturnPercent} /></div>
           <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground"><span><i className="mr-1.5 inline-block h-2 w-2 rounded-full bg-cyan-400" />Base path</span><span><i className="mr-1.5 inline-block h-2 w-2 rounded-full border border-slate-400" />Range: ±2% return</span><span><i className="mr-1.5 inline-block h-2 w-2 rounded-full bg-amber-300" />FI target: {money(result.fiNumber)}</span></div>
         </div>
+        <section className="rounded-xl border bg-card p-5" aria-labelledby="fire-ai-overview-heading">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <h2 id="fire-ai-overview-heading" className="font-medium">AI overview</h2>
+            <button type="button" onClick={() => void generateOverview(overviewScenario, overviewSignature, new AbortController())} disabled={overviewLoading} className="rounded-lg border px-3 py-2 text-sm transition-colors hover:border-foreground/40 disabled:cursor-wait disabled:opacity-60">{overviewLoading ? "Generating…" : "Regenerate"}</button>
+          </div>
+          {overviewError && <p className="mt-4 rounded-lg border border-amber-400/30 bg-amber-400/5 p-3 text-sm text-amber-200" role="status">{overviewError}</p>}
+          {overviewLoading && !overview && <p className="mt-4 text-sm text-muted-foreground" role="status">Generating overview…</p>}
+          {overview && <div className="mt-4 rounded-lg bg-muted/30 p-4 text-sm leading-6" aria-live="polite"><p>{overview.text}</p>{overview.signature !== overviewSignature && <p className="mt-2 text-xs text-muted-foreground">Updating for the current scenario…</p>}</div>}
+        </section>
       </div>
     </section>
     <section className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr]">

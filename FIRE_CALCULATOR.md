@@ -24,6 +24,9 @@ The primary projection is useful without a retirement target. Retirement age and
 - Server page: [`src/app/finance/fire/page.tsx`](./src/app/finance/fire/page.tsx)
 - Client dashboard: [`src/components/finance/fire-dashboard.tsx`](./src/components/finance/fire-dashboard.tsx)
 - Calculation model: [`src/lib/finance/fire-model.ts`](./src/lib/finance/fire-model.ts)
+- AI overview UI: [`src/components/finance/fire-dashboard.tsx`](./src/components/finance/fire-dashboard.tsx)
+- AI overview validation and prompt: [`src/lib/finance/fire-overview.ts`](./src/lib/finance/fire-overview.ts)
+- AI overview Route Handler: [`src/app/api/finance/fire/overview/route.ts`](./src/app/api/finance/fire/overview/route.ts)
 - Finance test coverage: [`src/lib/finance/finance.test.ts`](./src/lib/finance/finance.test.ts)
 
 The server page loads Net Worth and Investing data in parallel, constructs a FIRE dashboard model, and passes that model to the client dashboard. The calculation functions are pure with respect to their inputs and are directly testable.
@@ -36,10 +39,99 @@ The page is organized into:
 2. Assumption controls
 3. Summary metric cards
 4. Main portfolio projection
-5. Scenario analysis
-6. Projected milestones
-7. Optional Coast FI projection
-8. Shareable scenario URL and working-month insight
+5. AI overview of the current scenario
+6. Scenario analysis
+7. Projected milestones
+8. Optional Coast FI projection
+9. Shareable scenario URL and working-month insight
+
+## AI overview
+
+An optional qualitative overview sits directly below the main portfolio
+projection chart, using the open space in that section without competing with
+the deterministic metrics and charts.
+
+### User experience
+
+- The overview generates automatically after the shareable scenario URL is
+  initialized, and refreshes after scenario edits settle briefly.
+- The **Regenerate** action remains available for a manual refresh.
+- It analyzes the assumptions and projection result currently shown in the
+  calculator. If an input changes after generation, the displayed overview is
+  marked as out of date until regenerated.
+- The result is short: a few sentences identifying the scenario's main
+  strength, the most important assumption or risk, and one useful sensitivity
+  to explore.
+- Loading, missing configuration, provider errors, and unusable responses are
+  shown as explicit non-blocking states. The FIRE calculator remains fully
+  usable if the AI service is unavailable.
+- The overview is not persisted. It exists only in the current page state and
+  is not added to shareable scenario URLs.
+
+### Data and interpretation contract
+
+The deterministic FIRE model remains the source of truth for all amounts,
+milestones, and dates. The AI may explain or contextualize those results but
+must not replace them, recalculate a competing projection, or present an
+estimate as guaranteed.
+
+The request contains only the current scenario's necessary numeric
+assumptions and concise model outputs, such as starting portfolio, annual
+spending, annual contributions, real-return and withdrawal assumptions,
+retirement horizon when enabled, FI target, projected FI year, and whether the
+retirement target is supported. It excludes names, birthday, raw Google Sheet
+data, account-level details, source rows, and the full scenario URL.
+
+The server supplies a concise instruction prompt. It asks for a candid
+qualitative take in one or two short sentences, focused on the plan's greatest
+strength, biggest opportunity, or an unusually optimistic assumption. It
+discourages repeating visible numeric results, generic warnings, and forced
+disclaimers. The overview must use only supplied facts and avoid individualized
+financial advice.
+
+### Application architecture
+
+The browser posts a typed, validated FIRE scenario summary to
+`POST /api/finance/fire/overview`. A Next.js Route Handler validates numeric
+inputs and bounds the request, constructs the provider prompt on the server,
+then sends a request to OpenRouter's chat-completions API. The provider key
+never reaches the browser.
+
+Configuration is server-only:
+
+```text
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=provider/model
+```
+
+`OPENROUTER_MODEL` selects the provider/model and must be configured for the
+deployment; do not hard-code a model identifier into client code. Requests use
+a bounded output length and timeout. Provider errors are converted to clear
+route errors, not success-shaped fallback text, and neither the key nor
+financial payloads are written to application logs.
+
+The route does not read Google Sheets; the client sends only the minimal
+scenario summary already present in the calculator. The overview request and
+response are not cached or stored. Automatic generation runs on initial
+scenario load and after edits settle; the Regenerate action makes an explicit
+additional request. Provider usage may incur cost.
+
+## AI overview prompt contract
+
+The server sends scenario values as a separate user message and uses a
+server-side system prompt to request this output:
+
+```text
+A casual, useful paragraph of 2-4 short sentences.
+```
+
+The route rejects empty, oversized, or task-narration responses. It normalizes
+ordinary markdown/prose and keeps at most the first two sentences, so minor
+format variation does not cause an otherwise useful response to fail. The
+client renders accepted model output as plain text, not HTML or executable
+markup. A deterministic test corpus checks that at least 80% of representative
+provider responses are accepted; this guards response handling, not the
+provider's real-world availability or output quality.
 
 The Coast FI-specific controls, milestone row, banner, and chart only appear while **Set a retirement target** is enabled.
 
