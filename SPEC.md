@@ -82,13 +82,17 @@ Instead of opening disparate spreadsheets, this application transforms raw track
 
 ## 7. Phased Roadmap
 
-- **Phase 1 (Immediate MVP):** 
+- **Phase 1 (Foundation):**
   - Base Shell Layout + Sidebar Navigation.
   - Google Sheets API utility setup.
-  - Complete **Finance Module** (Net Worth trend line, Asset Allocation pie/donut, FIRE Calculator).
 - **Phase 2:**
-  - **Recipes & Food Module** (Ingest 36-page recipe data, tag filtering, dinner selector).
+  - **Finance Module** (Net Worth, Investing, Income & Expenses, Vacations,
+    Housing, and FIRE planning).
 - **Phase 3:**
-  - **Fitness & Habit Tracker** (5K running log, pushup/training progress).
+  - **Music Module:** random album picker for the "Albums: To listen"
+    playlist and year-by-year Replay/Everything browsing and statistics.
+  - See [PHASE_3_MUSIC.md](./PHASE_3_MUSIC.md) for the detailed plan.
 - **Phase 4:**
+  - **Fitness & Habit Tracker** (5K running log, pushup/training progress).
+- **Phase 5:**
   - **Unified Home Dashboard** (Aggregated high-level overview cards from all modules).

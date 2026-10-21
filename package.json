@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "inspect:finance": "node --env-file=.env.local scripts/inspect-finance.mjs"
+    "inspect:finance": "node --env-file=.env.local scripts/inspect-finance.mjs",
+    "inspect:music": "node --env-file=.env.local scripts/inspect-music.mjs"
   },
   "dependencies": {
     "googleapis": "^181.0.0",
