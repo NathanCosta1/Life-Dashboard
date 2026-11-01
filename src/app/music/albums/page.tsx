@@ -31,11 +31,6 @@ export default async function AlbumsPage() {
       <MusicIssues issues={issues} />
       <AlbumPicker albums={albums} />
 
-      <p className="mt-5 text-xs leading-5 text-muted-foreground">
-        Album identity uses the normalized album title and credited artist
-        because the sheet does not include a separate album-artist field.
-        Choices are not saved or removed from Apple Music.
-      </p>
     </main>
   );
 }

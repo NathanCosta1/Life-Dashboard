@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function VaultRedirect() {
-  redirect("/secret");
+  redirect("/misc/secret");
 }

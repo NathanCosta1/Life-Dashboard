@@ -9,15 +9,13 @@ const navigation = [
   { label: "Finance", href: "/finance" },
   { label: "Music", href: "/music" },
   { label: "Games", href: "/games" },
-  { label: "Recipes & Kitchen", href: "/recipes" },
-  { label: "Hikes", href: "/hikes" },
-  { label: "Secret", href: "/secret" },
-  { label: "Meditation", href: "/meditation" },
-];
-
-const futureWorkNavigation = [
+  { label: "Books", href: "/books" },
+  { label: "Jobs", href: "/jobs" },
   { label: "Fitness", href: "/fitness" },
-  { label: "Career & Learning", href: "/career" },
+  { label: "Recipes", href: "/recipes" },
+  { label: "Hikes", href: "/hikes" },
+  { label: "Meditation", href: "/meditation" },
+  { label: "MISC", href: "/misc" },
 ];
 
 export function Sidebar() {
@@ -70,31 +68,6 @@ export function Sidebar() {
               </Link>
             );
           })}
-        </nav>
-        <nav className="mt-6 border-t border-border px-1 pt-5 lg:mt-7" aria-label="Future work navigation">
-          <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
-            Future work
-          </p>
-          <div className="flex flex-col gap-1">
-            {futureWorkNavigation.map((item) => {
-              const isActive = pathname.startsWith(item.href);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={isActive ? "page" : undefined}
-                  onClick={() => setIsOpen(false)}
-                  className={`rounded-lg border border-transparent px-3 py-2.5 text-sm transition-colors ${
-                    isActive
-                      ? "border-border bg-accent font-medium text-accent-foreground"
-                      : "text-muted-foreground hover:border-border/70 hover:bg-accent/40 hover:text-foreground"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
         </nav>
         <div className="mt-8 hidden border-t px-3 pt-5 lg:block">
           <p className="text-xs text-muted-foreground">Data source</p>

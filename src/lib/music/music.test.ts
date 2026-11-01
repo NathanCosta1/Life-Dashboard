@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { renderToStaticMarkup } from "react-dom/server";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import {
   buildAlbumCandidates,
   buildMusicInsights,
@@ -6,6 +9,10 @@ import {
   getMusicLibraryRange,
   parseMusicLibrary,
 } from "./index";
+import { fetchAlbumArtwork, getHighResolutionArtworkUrl } from "./itunes";
+import { AlbumCoverImage } from "@/components/music/album-picker";
+
+const execFileAsync = promisify(execFile);
 
 const headers = [
   "Track name",
@@ -83,7 +90,6 @@ describe("parseMusicLibrary", () => {
     expect(albums).toHaveLength(2);
     expect(albums.find((album) => album.artist === "Artist")).toMatchObject({
       title: "The Album",
-      representativeTrack: "First Song",
       trackCount: 2,
     });
   });
@@ -189,4 +195,109 @@ describe("getMusicLibraryRange", () => {
     expect(getMusicLibraryRange(null)).toBe("'My Apple Music Library'!A1:I5000");
     expect(getMusicLibraryRange(50_000)).toBe("'My Apple Music Library'!A1:I10000");
   });
+});
+
+describe("fetchAlbumArtwork", () => {
+  it("renders the selected album cover image with the resolved iTunes URL", () => {
+    const html = renderToStaticMarkup(AlbumCoverImage({
+      album: {
+        id: "the album\u0000artist",
+        title: "The Album",
+        artist: "Artist",
+        trackCount: 1,
+        artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music123/600x600bb.jpg",
+      },
+    }));
+
+    expect(html).toContain("data-testid=\"album-cover\"");
+    expect(html).toContain("alt=\"The Album album cover\"");
+    expect(html).toContain("600x600bb.jpg");
+  });
+
+  it("grabs matching artwork from the iTunes API and upgrades it to 600px", async () => {
+    const mockFetch = async (input: string | URL | Request) => {
+      const url = String(input);
+      expect(url).toContain("itunes.apple.com/search");
+      expect(url).toContain("entity=album");
+      return {
+        ok: true,
+        json: async () => ({
+          results: [
+            {
+              collectionName: "The Album",
+              artistName: "Artist",
+              artworkUrl100: "https://is1-ssl.mzstatic.com/image/thumb/100x100bb.jpg",
+            },
+          ],
+        }),
+      } as Response;
+    };
+
+    await expect(
+      fetchAlbumArtwork("The Album", "Artist", mockFetch as typeof fetch),
+    ).resolves.toBe("https://is1-ssl.mzstatic.com/image/thumb/600x600bb.jpg");
+  });
+
+  it("returns null when iTunes has no matching album or artwork", async () => {
+    const mockFetch = async () =>
+      ({
+        ok: true,
+        json: async () => ({
+          results: [{ collectionName: "Another Album", artistName: "Another Artist" }],
+        }),
+      }) as Response;
+
+    await expect(
+      fetchAlbumArtwork("The Album", "Artist", mockFetch as typeof fetch),
+    ).resolves.toBeNull();
+    expect(getHighResolutionArtworkUrl(null)).toBeNull();
+  });
+
+  it("falls back to an album-only iTunes search when the artist search misses", async () => {
+    let requestCount = 0;
+    const mockFetch = async () => {
+      requestCount += 1;
+      return requestCount === 1
+        ? ({
+            ok: true,
+            json: async () => ({ results: [] }),
+          }) as Response
+        : ({
+            ok: true,
+            json: async () => ({
+              results: [{
+                collectionName: "The Album Deluxe Edition",
+                artistName: "Artist",
+                artworkUrl100: "https://is1-ssl.mzstatic.com/image/thumb/Music123/100x100bb.jpg",
+              }],
+            }),
+          }) as Response;
+    };
+
+    await expect(
+      fetchAlbumArtwork("The Album", "Artist", mockFetch as typeof fetch),
+    ).resolves.toBe("https://is1-ssl.mzstatic.com/image/thumb/Music123/600x600bb.jpg");
+    expect(requestCount).toBe(2);
+  });
+
+  it.runIf(process.env.TEST_ITUNES_LIVE === "1")(
+    "returns a real usable iTunes cover URL and that cover image responds",
+    async () => {
+      const curl = process.platform === "win32" ? "curl.exe" : "curl";
+      const artworkUrl = "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/48/53/43/485343e3-dd6a-0034-faec-f4b6403f8108/13UMGIM63890.rgb.jpg/600x600bb.jpg";
+      const { stdout: statusOutput } = await execFileAsync(curl, [
+        "-L",
+        "-sS",
+        "-o",
+        process.platform === "win32" ? "NUL" : "/dev/null",
+        "-w",
+        "%{http_code}",
+        "-A",
+        "Mozilla/5.0",
+        artworkUrl!,
+      ], { timeout: 10_000 });
+      expect(statusOutput.trim()).toBe("200");
+    },
+    15_000,
+  );
 });

@@ -11,6 +11,10 @@
     linear-gradient(145deg, #080c0b, #101513 58%, #070909);
 }
 .vault-grid { position: absolute; inset: 0; opacity: 0.18; background-image: linear-gradient(rgba(134,199,163,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(134,199,163,.12) 1px,transparent 1px); background-size: 42px 42px; mask-image: radial-gradient(circle, #000 20%, transparent 72%); }
+.vault-back-link { position:absolute;z-index:5;top:18px;left:18px;min-height:44px;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(174,211,191,.28);padding:8px 12px;color:#bed0c4;background:rgba(9,13,12,.92);font:700 10px/1 var(--font-geist-mono);letter-spacing:.08em;text-decoration:none;text-transform:uppercase; }
+.vault-back-link:hover,.vault-back-link:focus-visible { border-color:#9fe0b9;color:#d9f3e4;outline:2px solid transparent; }
+.vault-back-link span { font-size:18px;line-height:1; }
+.vault-back-link-inline { position:static;display:flex;width:fit-content;margin-bottom:14px; }
 .vault-terminal { position: relative; z-index: 1; width: min(820px, 100%); border: 1px solid rgba(143, 183, 163, 0.34); border-radius: 18px; padding: clamp(18px, 4vw, 42px); background: linear-gradient(145deg, rgba(22,31,27,.97), rgba(8,11,10,.98)); box-shadow: 0 36px 100px rgba(0,0,0,.58), inset 0 0 0 8px rgba(3,5,4,.72), inset 0 0 40px rgba(113,190,151,.04); }
 .vault-terminal-header { display: flex; justify-content: space-between; gap: 16px; margin-bottom: clamp(16px,3vw,30px); color: #7f9c8e; font: 700 10px/1 var(--font-geist-mono); letter-spacing: .14em; text-transform: uppercase; }
 .vault-access-display { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(8px,1.8vw,16px); }

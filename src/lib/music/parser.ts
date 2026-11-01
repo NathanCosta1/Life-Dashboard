@@ -199,8 +199,8 @@ export function buildAlbumCandidates(tracks: readonly MusicTrack[]): AlbumCandid
         id,
         title: track.album,
         artist: track.artist,
-        representativeTrack: track.title,
         trackCount: 1,
+        artworkUrl: null,
       });
     }
   }

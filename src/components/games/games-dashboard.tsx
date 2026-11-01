@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import type { DigitalGame, FavoriteOwner, GamesLibrary } from "@/lib/games/types";
 import { chooseRandomGame } from "@/lib/games/parser";
 
@@ -67,6 +68,7 @@ export function GamesDashboard({ data }: { data: GamesLibrary }) {
 
   return (
     <div>
+      <Link href="/games" className="games-back-link"><span aria-hidden="true">←</span> Games directory</Link>
       <header className="games-header">
         <div>
           <p className="games-kicker">Game library</p>

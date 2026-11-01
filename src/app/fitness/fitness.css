@@ -1,0 +1,53 @@
+.fitness-theme { min-height:100vh;background:#1d2219;color:#f0e8d2;padding:0; }
+.basketball-page { width:min(1180px,100%);min-height:100vh;margin:0 auto;padding:28px 20px 48px;background:linear-gradient(135deg,rgba(239,134,55,.09),transparent 42%),repeating-linear-gradient(90deg,transparent 0 90px,rgba(240,232,210,.035) 91px); }
+.basketball-back,.cornhole-back { min-height:44px;width:fit-content;display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;border:2px solid currentColor;padding:8px 12px;color:inherit;font-size:10px;font-weight:900;letter-spacing:.1em;text-decoration:none;text-transform:uppercase; }
+.basketball-back:hover,.basketball-back:focus-visible { background:#f0e8d2;color:#1d2219;outline:2px solid transparent; }
+.basketball-header { min-height:150px;display:flex;align-items:end;justify-content:space-between;border-top:6px solid #ef8637;border-bottom:2px solid rgba(240,232,210,.3);padding:18px 0 14px; }
+.basketball-header p { margin:0;color:#ef8637;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase; }
+.basketball-header h1 { margin:5px 0 0;font-family:Impact,sans-serif;font-size:clamp(64px,10vw,118px);line-height:.78;font-weight:400;text-transform:uppercase; }
+.basketball-title-mark { width:86px;height:86px;border-radius:50%;border:4px solid #ef8637;position:relative;background:repeating-linear-gradient(90deg,transparent 0 39px,#ef8637 40px 44px);opacity:.95; }
+.basketball-title-mark span { position:absolute;inset:38px -4px auto;border-top:4px solid #ef8637; }
+.basketball-drills { display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px; }
+.basketball-drills button { min-height:74px;border:1px solid rgba(240,232,210,.22);padding:12px;text-align:left;background:rgba(240,232,210,.06);color:#f0e8d2;font-size:14px;font-weight:900;text-transform:uppercase;cursor:pointer; }
+.basketball-drills button small { display:block;margin-top:6px;color:#bcb59f;font-size:9px;letter-spacing:.08em; }
+.basketball-drills button.is-active { border-color:#ef8637;background:#ef8637;color:#1d2219;box-shadow:5px 5px 0 #10130e; }
+.basketball-scoreboard { display:grid;grid-template-columns:2fr repeat(4,1fr);gap:6px;margin-top:10px; }
+.basketball-scoreboard article { min-height:112px;display:flex;flex-direction:column;justify-content:end;border:1px solid rgba(240,232,210,.18);padding:12px;background:#242a20; }
+.basketball-scoreboard .basketball-primary { background:#ef8637;color:#1d2219; }
+.basketball-scoreboard span { font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase; }
+.basketball-scoreboard strong { margin-top:8px;font-family:var(--font-geist-mono);font-size:clamp(24px,3vw,38px); }
+.basketball-trend { margin-top:10px;border:1px solid rgba(240,232,210,.18);padding:14px;background:#242a20; }
+.basketball-trend header { display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid rgba(240,232,210,.12);padding-bottom:10px; }
+.basketball-trend header p { margin:0;color:#ef8637;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase; }
+.basketball-trend header h2 { margin:3px 0 0;font-size:20px;text-transform:uppercase; }
+.basketball-trend header strong { color:#ef8637;font-size:12px;text-transform:uppercase; }
+.basketball-chart { height:220px;display:flex;align-items:end;gap:6px;border-bottom:1px solid rgba(240,232,210,.25);padding-top:18px;overflow-x:auto; }
+.basketball-chart-point { min-width:22px;height:100%;flex:1;display:flex;flex-direction:column;justify-content:end;align-items:center; }
+.basketball-chart-point span { width:100%;max-width:18px;min-height:8px;border-radius:12px 12px 0 0;background:#ef8637; }
+.basketball-chart-point small { margin-top:5px;font-size:8px;color:#bcb59f;white-space:nowrap; }
+.basketball-no-trend { min-height:220px;display:grid;place-items:center;color:#bcb59f;font-size:12px;text-transform:uppercase;letter-spacing:.08em; }
+.basketball-ledger { margin-top:10px;border-top:4px solid #ef8637; }
+.basketball-ledger > header { display:flex;justify-content:space-between;padding:12px 0;color:#ef8637;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em; }
+.basketball-ledger article { min-height:62px;display:grid;grid-template-columns:minmax(130px,1.4fr) 100px repeat(2,minmax(90px,1fr));align-items:center;border-top:1px solid rgba(240,232,210,.12);padding:10px 12px;background:rgba(240,232,210,.035); }
+.basketball-ledger article time,.basketball-ledger article span { font-size:12px;color:#bcb59f; }
+.basketball-ledger article strong { font-family:var(--font-geist-mono);font-size:22px;color:#ef8637; }
+.basketball-issues { margin-top:12px;border-left:4px solid #ef8637;padding:12px;background:rgba(239,134,55,.08);font-size:12px; }
+.basketball-issues p { margin-bottom:6px;font-weight:900;text-transform:uppercase; }
+.fitness-directory .basketball-header { margin-bottom:18px; }
+.fitness-basketball-card { min-height:260px;display:grid;grid-template-columns:48px minmax(0,1fr) 42px;align-items:end;border:2px solid rgba(240,232,210,.35);padding:18px;color:#f0e8d2;background:linear-gradient(135deg,#b7542c,#ef8637);text-decoration:none;box-shadow:10px 10px 0 #10130e; }
+.fitness-basketball-card > span { align-self:start;font-size:10px;font-weight:900; }
+.fitness-basketball-card > div { min-width:0; }
+.fitness-basketball-card p,.fitness-basketball-card small { font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.1em; }
+.fitness-basketball-card h2 { margin:7px 0;font-family:Impact,sans-serif;font-size:clamp(58px,9vw,100px);line-height:.82;font-weight:400;text-transform:uppercase; }
+.fitness-basketball-card strong { font-size:28px;text-align:right; }
+.fitness-races-card { min-height:260px;display:grid;grid-template-columns:48px minmax(0,1fr) 42px;align-items:end;margin-top:18px;border:3px solid #171918;padding:18px;color:#171918;background:repeating-linear-gradient(135deg,#eee9d4 0 18px,#f7f2df 18px 36px);text-decoration:none;box-shadow:8px 8px 0 #f05a32; }
+.fitness-races-card > span { align-self:start;font-family:var(--font-geist-mono);font-size:10px;font-weight:900; }
+.fitness-races-card p,.fitness-races-card small { font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.1em; }
+.fitness-races-card h2 { margin:7px 0;font-family:Impact,sans-serif;font-size:clamp(58px,9vw,100px);line-height:.82;font-weight:400;text-transform:uppercase; }
+.fitness-races-card strong { font-size:28px;text-align:right; }
+@media(max-width:760px){
+  .basketball-header{min-height:120px}.basketball-title-mark{width:58px;height:58px}
+  .basketball-scoreboard{grid-template-columns:repeat(2,1fr)}.basketball-scoreboard .basketball-primary{grid-column:span 2}
+  .basketball-ledger article{grid-template-columns:1fr 78px}.basketball-ledger article span{margin-top:4px}
+  .basketball-trend header{align-items:start}.basketball-chart{gap:3px}
+}

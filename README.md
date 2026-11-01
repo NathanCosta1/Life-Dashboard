@@ -49,11 +49,41 @@ counts, and basic inferred types. It intentionally does not print cell contents.
 - Finance
 - Music
 - Games
+  - Library
+  - Cornhole
+  - Random
+- Books
+- Jobs
+- Fitness
+  - Basketball
+  - Races
 - Meditation
 - Hikes
 - Recipes
-- Secret
-- Future placeholders for Fitness and Career
+- Misc
+  - Secret
+  - Screen Time
+  - Movies
+
+## Adding or updating a module
+
+Whenever a new module is added, update the
+[Life Dashboard data refresh skill](./.github/skills/life-dashboard-data-refresh/SKILL.md)
+in the same change. The skill entry should document:
+
+- the source type and environment variable,
+- the source tabs, document sections, or named ranges it reads,
+- the matching inspector command and package script,
+- the cache duration and whether refresh is automatic,
+- the files that contain parsing and derived calculations,
+- missing-value behavior and unit or plausible-value diagnostics,
+- how any subjective or one-off statistics are calculated,
+- parser tests and the recommended manual refresh cadence.
+
+Use the refresh skill after source data changes, cached data looks stale, headers
+drift, or subjective statistics need recomputation. Correct the Google Sheets or
+Google Docs source itself when it contains a wrong value; parsers should validate
+and preserve that value rather than silently repairing it.
 
 ## Getting Started
 

@@ -1,11 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import type { MeditationData, MeditationDay, MeditationYearData } from "@/lib/meditation/types";
 import "./meditation.css";
 
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function subscribeToday() {
+  return () => {};
+}
+
+function getClientTodayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getServerTodayIso() {
+  return "";
+}
 
 function formatMinutes(minutes: number): string {
   const rounded = Number.isInteger(minutes) ? minutes : Number(minutes.toFixed(1));
@@ -24,6 +36,7 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
   const [trendMode, setTrendMode] = useState<"daily" | "7-day" | "30-day">("7-day");
   const [weekdayMode, setWeekdayMode] = useState<"Minutes" | "Active days">("Minutes");
   const [selectedDay, setSelectedDay] = useState<MeditationDay | null>(null);
+  const todayIso = useSyncExternalStore(subscribeToday, getClientTodayIso, getServerTodayIso);
 
   const latest = year?.sessions.reduce<MeditationYearData["sessions"][number] | null>(
     (latestSession, session) =>
@@ -70,12 +83,13 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
 
   const yearDays = year.days.filter((day) => Number(day.date.slice(5, 7)) === selectedMonth);
   const monthLabel = MONTH_NAMES[selectedMonth - 1];
-  const todayIso = new Date().toISOString().slice(0, 10);
   const heroDay = year.days.find((day) => day.date === todayIso)
     ?? (latest ? year.days.find((day) => day.date === latest.date) : null);
   const latestDate = latest?.date;
   const daysSinceLatest = latestDate
-    ? Math.floor((Date.parse(`${todayIso}T00:00:00Z`) - Date.parse(`${latestDate}T00:00:00Z`)) / 86_400_000)
+    ? todayIso
+      ? Math.floor((Date.parse(`${todayIso}T00:00:00Z`) - Date.parse(`${latestDate}T00:00:00Z`)) / 86_400_000)
+      : null
     : null;
   const copySummary = async () => {
     const text = `${year.year} meditation: ${year.summary.totalSessions} sessions, ${formatMinutes(year.summary.totalMinutes)}, ${year.summary.activeDays} active days, ${year.summary.longestStreak}-day longest streak.`;

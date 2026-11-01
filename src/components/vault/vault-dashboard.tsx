@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { VaultLibrary } from "@/lib/vault/types";
 import { lockVault, unlockVault } from "@/app/vault/actions";
 
@@ -60,6 +61,9 @@ function VaultGate({ onUnlocked }: { onUnlocked: () => void }) {
   return (
     <div className={`vault-gate vault-gate-${status}`} key={attempt}>
       <div className="vault-grid" aria-hidden="true" />
+      <Link href="/misc" className="vault-back-link">
+        <span aria-hidden="true">←</span> Back to MISC
+      </Link>
       <main className="vault-terminal" aria-label="Private vault access">
         <header className="vault-terminal-header">
           <span>PRIVATE NODE // SECRET</span>
@@ -156,7 +160,12 @@ export function VaultDashboard({ data, unlocked }: { data: VaultLibrary | null; 
   return (
     <div className="vault-theme">
       <header className="vault-page-header">
-        <div><p>SECRET PAGE</p><h1>Secret</h1></div>
+        <div>
+          <Link href="/misc" className="vault-back-link vault-back-link-inline">
+            <span aria-hidden="true">←</span> Back to MISC
+          </Link>
+          <p>SECRET PAGE</p><h1>Secret</h1>
+        </div>
         <button type="button" className="vault-lock-button" onClick={handleLock}>Lock page</button>
       </header>
       <section className="vault-metrics" aria-label="Vault summary">

@@ -37,8 +37,8 @@ export type AlbumCandidate = {
   id: string;
   title: string;
   artist: string;
-  representativeTrack: string;
   trackCount: number;
+  artworkUrl: string | null;
 };
 
 export type MusicRanking = {

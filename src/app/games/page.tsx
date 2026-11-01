@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-import { GamesDashboard } from "@/components/games/games-dashboard";
-import { loadGamesLibrary } from "@/lib/games/data";
+import { GamesDirectory } from "@/components/games/games-directory";
 
 export const metadata: Metadata = {
   title: "Games | Life Dashboard",
-  description: "Game library, favorites, watchlist, and completed games.",
+  description: "Gaming library and one-off random projects.",
 };
 
-export default async function GamesPage() {
-  const data = await loadGamesLibrary();
-  return <GamesDashboard data={data} />;
+export default function GamesPage() {
+  return <GamesDirectory />;
 }

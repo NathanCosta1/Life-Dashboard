@@ -1,0 +1,232 @@
+.movies-page {
+  --movie-red: #d9362a;
+  --movie-gold: #f2c66d;
+  --movie-cream: #efe1ba;
+  width: min(1180px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px clamp(18px, 4vw, 48px) 64px;
+  color: var(--movie-cream);
+  background:
+    radial-gradient(circle at 50% 8%, rgba(242, 198, 109, 0.12), transparent 22rem),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
+    #120d0c;
+  background-size: auto, 24px 24px, auto;
+  border-inline: 1px solid rgba(242,198,109,0.12);
+}
+
+.movies-marquee {
+  position: relative;
+  border: 2px solid var(--movie-gold);
+  border-radius: 8px 8px 18px 18px;
+  background: #1b1110;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.38);
+}
+
+.movies-back {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  left: 14px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(242,198,109,0.46);
+  padding: 8px 11px;
+  color: var(--movie-cream);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.movies-back:hover, .movies-back:focus-visible { color: #120d0c; background: var(--movie-gold); }
+
+.movies-bulbs {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(242,198,109,0.4);
+  background: repeating-linear-gradient(90deg, #241713 0 26px, #17100f 26px 52px);
+}
+.movies-bulbs i {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: var(--movie-gold);
+  box-shadow: 0 0 8px rgba(242,198,109,0.9);
+}
+
+.movies-header {
+  min-height: 210px;
+  position: relative;
+  display: grid;
+  place-items: end center;
+  padding: 48px 18px 24px;
+  text-align: center;
+}
+.movies-header::before {
+  content: "";
+  position: absolute;
+  inset: 16px 12% 10px;
+  border: 1px solid rgba(242,198,109,0.2);
+  border-radius: 50%;
+  transform: perspective(300px) rotateX(-12deg);
+}
+.movies-header p, .movies-header span {
+  position: absolute;
+  font-family: var(--font-geist-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+.movies-header p { top: 20px; margin: 0; color: var(--movie-gold); font-size: 9px; }
+.movies-header span { right: 24px; bottom: 12px; font-size: 9px; }
+.movies-header h1 {
+  position: relative;
+  margin: 0;
+  color: var(--movie-red);
+  font-family: Impact, "Arial Black", sans-serif;
+  font-size: clamp(96px, 16vw, 190px);
+  line-height: 0.72;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 var(--movie-gold);
+}
+
+.movies-feature-screen {
+  min-height: 350px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+  align-items: end;
+  overflow: hidden;
+  margin-top: 22px;
+  border: 10px solid #251816;
+  border-radius: 50% / 8%;
+  background:
+    linear-gradient(180deg, rgba(9,8,7,0.1), rgba(9,8,7,0.84)),
+    radial-gradient(circle at 50% 46%, rgba(242,198,109,0.2), transparent 30%),
+    #060606;
+}
+.movies-screen-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 62px, rgba(242,198,109,0.24) 63px 64px),
+    repeating-linear-gradient(0deg, transparent 0 62px, rgba(242,198,109,0.24) 63px 64px);
+}
+.movies-feature-primary, .movies-ticket-stats { position: relative; z-index: 1; }
+.movies-feature-primary { align-self: center; padding: 40px; }
+.movies-feature-primary p { margin: 0 0 12px; color: var(--movie-gold); font-family: var(--font-geist-mono), monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .18em; }
+.movies-feature-primary strong { display: block; max-width: 620px; font-family: Georgia, serif; font-size: clamp(42px, 7vw, 78px); line-height: .92; }
+.movies-feature-primary span { display: inline-block; margin-top: 18px; border-top: 1px solid var(--movie-gold); padding-top: 8px; color: var(--movie-gold); }
+.movies-ticket-stats { display: grid; grid-template-columns: 1fr 1fr; border-left: 1px solid rgba(242,198,109,.22); }
+.movies-ticket-stats article { min-height: 106px; padding: 18px; border-right: 1px solid rgba(242,198,109,.22); border-top: 1px solid rgba(242,198,109,.22); }
+.movies-ticket-stats span { display: block; color: rgba(239,225,186,.7); font-family: var(--font-geist-mono), monospace; font-size: 9px; text-transform: uppercase; }
+.movies-ticket-stats strong { display: block; margin-top: 10px; font-size: clamp(28px,4vw,48px); }
+
+.movies-year-strip, .movies-rating-board, .movies-ranking, .movies-review-ledger, .movies-watchlist, .movies-audience-ledger {
+  margin-top: 22px;
+  border-top: 1px solid rgba(242,198,109,.32);
+}
+.movies-year-strip > header, .movies-rating-board > header, .movies-ranking > header, .movies-review-ledger > header, .movies-watchlist > header {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(242,198,109,.14);
+}
+.movies-year-strip header p, .movies-rating-board header p, .movies-ranking header p, .movies-review-ledger header p, .movies-watchlist header p,
+.movies-audience-ledger header p { margin: 0; color: var(--movie-gold); font-family: var(--font-geist-mono), monospace; font-size: 10px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+.movies-year-strip header span, .movies-rating-board header span, .movies-ranking header span, .movies-review-ledger header span, .movies-watchlist header span { color: rgba(239,225,186,.58); font-size: 10px; text-transform: uppercase; }
+.movies-year-strip > div { height: 210px; display: flex; align-items: end; gap: 12px; padding-top: 18px; }
+.movies-year-strip article { min-width: 86px; height: 100%; display: grid; grid-template-columns: 1fr; grid-template-rows: 24px 1fr 28px 24px; align-items: end; text-align: center; }
+.movies-year-strip time { color: var(--movie-gold); font-family: Georgia, serif; }
+.movies-year-bar { height: 100px; align-self: end; display: flex; align-items: end; border-bottom: 1px solid rgba(242,198,109,.5); }
+.movies-year-bar span { width: 100%; display: block; background: linear-gradient(180deg, var(--movie-red), rgba(217,54,42,.18)); }
+.movies-year-strip strong { font-size: 24px; }
+.movies-year-strip small { color: rgba(239,225,186,.6); }
+
+.movies-columns { display: grid; grid-template-columns: minmax(280px,.8fr) minmax(360px,1.2fr); gap: 22px; }
+.movies-rating-board { min-width: 0; }
+.movies-rating-bars { padding: 14px 0; }
+.movies-rating-bars article { min-height: 38px; display: grid; grid-template-columns: 30px 1fr 28px; align-items: center; gap: 10px; }
+.movies-rating-bars article > span, .movies-rating-bars article > strong { font-family: var(--font-geist-mono), monospace; }
+.movies-rating-bars article div { height: 9px; background: rgba(242,198,109,.08); }
+.movies-rating-bars article i { height: 100%; display: block; background: var(--movie-red); }
+.movies-ranking article { min-height: 74px; display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px; border-bottom: 1px solid rgba(242,198,109,.09); }
+.movies-ranking article > span { color: var(--movie-red); font-family: Georgia, serif; font-size: 20px; }
+.movies-ranking article div strong, .movies-ranking article div small { display: block; }
+.movies-ranking article div strong { font-family: Georgia, serif; font-size: 18px; }
+.movies-ranking article div small { margin-top: 4px; color: rgba(239,225,186,.55); }
+.movies-ranking article b { color: var(--movie-gold); }
+
+.movies-review-ledger article { min-height: 112px; display: grid; grid-template-columns: minmax(180px,.8fr) 120px 80px minmax(230px,1.5fr); align-items: center; gap: 16px; border-bottom: 1px solid rgba(242,198,109,.1); padding: 12px 0; }
+.movies-review-title strong { display: block; font-family: Georgia, serif; font-size: clamp(20px,2.5vw,30px); }
+.movies-review-title small, .movies-review-ledger time, .movies-review-copy small { color: rgba(239,225,186,.6); font-size: 11px; }
+.movies-review-rating { color: var(--movie-gold); font-size: 20px; }
+.movies-review-copy p { margin: 7px 0 0; line-height: 1.5; white-space: pre-line; }
+
+.movies-watchlist-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; padding-top: 16px; }
+.movies-watchlist-grid article { min-height: 190px; display: flex; flex-direction: column; border: 1px solid rgba(242,198,109,.24); padding: 16px; background: linear-gradient(145deg, rgba(217,54,42,.08), transparent 65%); }
+.movies-watchlist-grid article > div { min-height: 24px; display: flex; justify-content: space-between; gap: 8px; color: var(--movie-gold); font-family: var(--font-geist-mono), monospace; font-size: 8px; text-transform: uppercase; }
+.movies-watchlist-grid article i { color: var(--movie-red); font-style: normal; }
+.movies-watchlist-grid h2 { margin: auto 0 12px; font-family: Georgia, serif; font-size: clamp(26px,3vw,38px); line-height: .95; }
+.movies-watchlist-grid p { margin: 0; color: rgba(239,225,186,.68); line-height: 1.45; white-space: pre-line; }
+
+.movies-audience-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding-top: 18px; }
+.movies-audience-ledger article { border: 1px solid rgba(242,198,109,.12); padding: 14px; }
+.movies-audience-ledger div { min-height: 38px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(242,198,109,.08); }
+.movies-audience-ledger strong { color: var(--movie-gold); }
+
+.movies-empty { min-height: 110px; display: grid; place-items: center; color: rgba(239,225,186,.58); text-align: center; }
+.movies-empty-wide { grid-column: 1/-1; }
+.movies-source-issues { margin-top: 24px; border: 1px solid rgba(242,198,109,.18); padding: 12px; color: rgba(239,225,186,.72); }
+.movies-source-issues summary { cursor: pointer; }
+.movies-source-issues li { margin-top: 8px; line-height: 1.45; }
+.movies-loading { width: min(1180px,100%); min-height: 70vh; margin:auto; padding:24px; display:grid; gap:16px; background:#120d0c; }
+.movies-loading div { min-height:180px; border-radius:8px; background:linear-gradient(90deg,#1b1110,#302019,#1b1110); background-size:200% 100%; animation: movies-shimmer 1.4s linear infinite; }
+.movies-error { min-height:70vh; display:grid; place-content:center; gap:12px; padding:24px; color:#efe1ba; text-align:center; background:#120d0c; }
+.movies-error button { min-height:44px; border:1px solid #f2c66d; color:#f2c66d; background:transparent; cursor:pointer; }
+.movies-error a { color:#f2c66d; }
+@keyframes movies-shimmer { to { background-position:-200% 0; } }
+
+@media (max-width: 780px) {
+  .movies-header { min-height: 180px; }
+  .movies-header h1 { font-size: clamp(78px,23vw,120px); }
+  .movies-header span { right: 12px; }
+  .movies-feature-screen { grid-template-columns: 1fr; border-radius: 30px; }
+  .movies-feature-primary { padding: 38px 24px 20px; }
+  .movies-ticket-stats { border-left: 0; }
+  .movies-columns { grid-template-columns: 1fr; }
+  .movies-review-ledger article { grid-template-columns: minmax(140px,.8fr) 90px 70px; }
+  .movies-review-copy { grid-column: 1/-1; padding-bottom: 8px; }
+  .movies-watchlist-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .movies-page { padding-inline: 14px; }
+  .movies-back { position: static; margin: 10px; }
+  .movies-bulbs { height: 24px; }
+  .movies-header { min-height: 150px; padding-bottom: 20px; }
+  .movies-header h1 { font-size: 74px; }
+  .movies-header span { position: static; align-self:end; margin-bottom:-8px; }
+  .movies-feature-screen { min-height: 420px; }
+  .movies-ticket-stats article { min-height: 92px; padding: 12px; }
+  .movies-year-strip { overflow-x: auto; }
+  .movies-year-strip > div { min-width: 520px; }
+  .movies-review-ledger article { grid-template-columns: 1fr 90px 70px; }
+  .movies-review-title { grid-column:1/-1; }
+  .movies-watchlist-grid, .movies-audience-ledger { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .movies-loading div { animation: none; }
+}

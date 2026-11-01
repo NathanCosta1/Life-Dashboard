@@ -54,6 +54,27 @@ body {
   animation: music-spin 1.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.music-wheel::before {
+  content: "";
+  width: 28%;
+  height: 28%;
+  position: absolute;
+  left: 36%;
+  top: 36%;
+  z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at center, #09090b 0 24%, #27272a 25% 38%, #111113 39%);
+  box-shadow: 0 0 0 8px rgba(9, 9, 11, 0.18);
+}
+
+.music-wheel > span:last-child {
+  z-index: 2;
+  text-align: center;
+  line-height: 1.15;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

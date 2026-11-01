@@ -1,27 +1,22 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { CurrentDate } from "@/components/current-date";
 import "./themes.css";
 
 const modules = [
   { label: "Finance", href: "/finance", detail: "Capital & planning", color: "#ef735b" },
   { label: "Music", href: "/music", detail: "Library & playlists", color: "#7fb5d8" },
   { label: "Games", href: "/games", detail: "Library & favorites", color: "#a7d36c" },
+  { label: "Books", href: "/books", detail: "Reading archive", color: "#d2a98b" },
+  { label: "Jobs", href: "/jobs", detail: "Career record", color: "#9d765f" },
+  { label: "Fitness", href: "/fitness", detail: "Training record", color: "#ef8637" },
   { label: "Meditation", href: "/meditation", detail: "Practice history", color: "#a995cd" },
   { label: "Hikes", href: "/hikes", detail: "Trail journal", color: "#79a17a" },
-  { label: "Recipes", href: "/recipes", detail: "Recipes & kitchen", color: "#efad66" },
-  { label: "Fitness", href: "/fitness", detail: "Training & progress", color: "#ffcf43" },
-  { label: "Career", href: "/career", detail: "Skills & development", color: "#70c1ad" },
-  { label: "Secret", href: "/secret", detail: "Private records", color: "#b9b3aa" },
+  { label: "Recipes", href: "/recipes", detail: "Recipe archive", color: "#efad66" },
+  { label: "MISC", href: "/misc", detail: "One-off collections", color: "#b9b3aa" },
 ];
 
 export default function Home() {
-  const dateLabel = new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  }).format(new Date());
-
   return (
     <div className="life-theme">
       <header className="life-dashboard-header">
@@ -29,7 +24,7 @@ export default function Home() {
           <p className="life-dashboard-kicker">Personal operating system</p>
           <h1>Life / Index</h1>
         </div>
-        <p className="life-dashboard-date">{dateLabel}</p>
+        <CurrentDate />
       </header>
 
       <section className="dashboard-modules" aria-label="Life dashboard modules">

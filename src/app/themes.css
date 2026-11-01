@@ -61,12 +61,13 @@
 .module-poster-finance { grid-column: span 5; grid-row: span 2; }
 .module-poster-music { grid-column: span 3; }
 .module-poster-games { grid-column: span 4; }
+.module-poster-books { grid-column: span 3; }
+.module-poster-jobs { grid-column: span 4; }
+.module-poster-fitness { grid-column: span 4; }
 .module-poster-meditation { grid-column: span 4; grid-row: span 2; }
 .module-poster-hikes { grid-column: span 3; }
 .module-poster-recipes { grid-column: span 5; }
-.module-poster-fitness { grid-column: span 3; }
-.module-poster-career { grid-column: span 4; }
-.module-poster-secret { grid-column: span 2; background: #111111; color: #f3efdf; }
+.module-poster-misc { grid-column: span 3; background: #111111; color: #f3efdf; }
 
 .module-theme,
 .finance-theme,
@@ -291,8 +292,8 @@
   .module-poster-games,
   .module-poster-hikes,
   .module-poster-fitness,
-  .module-poster-secret { grid-column: span 1; }
-  .module-poster-secret { grid-column: span 2; }
+  .module-poster-jobs,
+  .module-poster-misc { grid-column: span 1; }
   .finance-theme { background-size: 28px 28px, 28px 28px, auto, auto; }
 }
 
