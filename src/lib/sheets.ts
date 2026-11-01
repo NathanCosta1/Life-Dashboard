@@ -6,6 +6,7 @@ const DEFAULT_REVALIDATE_SECONDS = 60 * 60;
 
 export type SheetRecord = Record<string, string>;
 export type SheetMatrix = string[][];
+export type SheetBackgroundColors = Record<number, string | null>;
 
 export type SheetRowParser<T> = (row: SheetRecord, rowNumber: number) => T;
 
@@ -104,6 +105,45 @@ export async function readSheetMatrix({
   );
 
   return getValues();
+}
+
+export async function readSheetBackgroundColors({
+  spreadsheetId,
+  range,
+  revalidate = DEFAULT_REVALIDATE_SECONDS,
+  tags = [],
+}: Omit<ReadSheetOptions<unknown>, "parseRow">): Promise<SheetBackgroundColors> {
+  if (!spreadsheetId.trim()) {
+    throw new Error("A Google Sheets spreadsheetId is required.");
+  }
+
+  const cacheKey = ["google-sheet-background-colors", spreadsheetId, range];
+  const getColors = unstable_cache(
+    async () => {
+      const client = createSheetsClient();
+      const response = await client.spreadsheets.get({
+        spreadsheetId,
+        ranges: [range],
+        includeGridData: true,
+        fields: "sheets(data(rowData(values(effectiveFormat(backgroundColor)))))",
+      });
+      const rows = response.data.sheets?.[0]?.data?.[0]?.rowData ?? [];
+      return rows.reduce<SheetBackgroundColors>((colors, row, index) => {
+        const color = row.values?.[0]?.effectiveFormat?.backgroundColor;
+        colors[index + 1] = color
+          ? `${color.red ?? 0},${color.green ?? 0},${color.blue ?? 0}`
+          : null;
+        return colors;
+      }, {});
+    },
+    cacheKey,
+    {
+      revalidate,
+      tags: ["google-sheets", ...tags],
+    },
+  );
+
+  return getColors();
 }
 
 export async function listSheetTabs(spreadsheetId: string) {

@@ -1,27 +1,51 @@
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import "./themes.css";
+
+const modules = [
+  { label: "Finance", href: "/finance", detail: "Capital & planning", color: "#ef735b" },
+  { label: "Music", href: "/music", detail: "Library & playlists", color: "#7fb5d8" },
+  { label: "Games", href: "/games", detail: "Library & favorites", color: "#a7d36c" },
+  { label: "Meditation", href: "/meditation", detail: "Practice history", color: "#a995cd" },
+  { label: "Hikes", href: "/hikes", detail: "Trail journal", color: "#79a17a" },
+  { label: "Recipes", href: "/recipes", detail: "Recipes & kitchen", color: "#efad66" },
+  { label: "Fitness", href: "/fitness", detail: "Training & progress", color: "#ffcf43" },
+  { label: "Career", href: "/career", detail: "Skills & development", color: "#70c1ad" },
+  { label: "Secret", href: "/secret", detail: "Private records", color: "#b9b3aa" },
+];
+
 export default function Home() {
+  const dateLabel = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date());
+
   return (
-    <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
-      <header className="mb-10">
-        <p className="mb-2 text-sm font-medium text-muted-foreground">Friday, September 18</p>
-        <h1 className="text-3xl font-semibold tracking-tight">Good morning, Nathan.</h1>
-        <p className="mt-2 text-muted-foreground">Here&apos;s your personal overview.</p>
+    <div className="life-theme">
+      <header className="life-dashboard-header">
+        <div>
+          <p className="life-dashboard-kicker">Personal operating system</p>
+          <h1>Life / Index</h1>
+        </div>
+        <p className="life-dashboard-date">{dateLabel}</p>
       </header>
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {["Net worth", "Monthly cash flow", "Savings rate", "Next milestone"].map((label, index) => (
-          <div key={label} className="rounded-xl border bg-card p-5">
-            <p className="text-sm text-muted-foreground">{label}</p>
-            <p className="mt-3 text-2xl font-semibold tabular-nums">
-              {index === 0 ? "$—" : index === 1 ? "$—" : index === 2 ? "—%" : "—"}
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">Connect your data to get started</p>
-          </div>
+
+      <section className="dashboard-modules" aria-label="Life dashboard modules">
+        {modules.map((module, index) => (
+          <Link
+            key={module.href}
+            href={module.href}
+            className={`module-poster module-poster-${module.label.toLowerCase().replace(/\s+/g, "-")}`}
+            style={{ "--module-color": module.color } as CSSProperties}
+          >
+            <span className="module-poster-number">{String(index + 1).padStart(2, "0")}</span>
+            <span className="module-poster-detail">{module.detail}</span>
+            <strong>{module.label}</strong>
+            <span className="module-poster-arrow" aria-hidden="true">↗</span>
+          </Link>
         ))}
-      </section>
-      <section className="mt-6 rounded-xl border bg-card p-6">
-        <p className="text-sm font-medium">Your dashboard is ready</p>
-        <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-          Choose a module from the sidebar to start building your personal operating system.
-        </p>
       </section>
     </div>
   );

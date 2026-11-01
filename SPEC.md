@@ -118,17 +118,8 @@ into the UI.
 
 ## 7. Phased Roadmap
 
-- **Phase 1 (Foundation):**
-  - Base Shell Layout + Sidebar Navigation.
-  - Google Sheets API utility setup.
-- **Phase 2:**
-  - **Finance Module** (Net Worth, Investing, Income & Expenses, Vacations,
-    Housing, and FIRE planning).
-- **Phase 3:**
-  - **Music Module:** random album picker for the "Albums: To listen"
-    playlist and year-by-year Replay/Everything browsing and statistics.
-  - See [PHASE_3_MUSIC.md](./PHASE_3_MUSIC.md) for the detailed plan.
-- **Phase 4:**
-  - **Fitness & Habit Tracker** (5K running log, pushup/training progress).
-- **Phase 5:**
-  - **Unified Home Dashboard** (Aggregated high-level overview cards from all modules).
+## 7. Module Roadmap
+
+Active modules should be implemented independently and linked from the sidebar.
+Future modules may remain visible as clearly labeled future work, without fake
+data or fabricated progress.

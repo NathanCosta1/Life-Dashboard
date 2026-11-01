@@ -183,7 +183,7 @@ export function BudgetDashboard({ data }: { data: BudgetData }) {
             / Budget
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">Budget</h1>
-          <p className="mt-2 text-muted-foreground">A clear view of where your money goes and what remains.</p>
+          <p className="mt-2 text-muted-foreground">Income, planned outflows, investing, and remaining cash.</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -216,7 +216,7 @@ export function BudgetDashboard({ data }: { data: BudgetData }) {
 
       <section className="mt-6 rounded-xl border bg-card p-4 sm:p-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <div><h2 className="text-lg font-medium">Cash flow</h2><p className="mt-1 text-sm text-muted-foreground">Your income branches into the parts of your monthly plan.</p></div>
+          <div><h2 className="text-lg font-medium">Cash flow</h2><p className="mt-1 text-sm text-muted-foreground">Income allocated across the monthly plan.</p></div>
           <p className="text-xs text-muted-foreground">Ribbon width represents the amount</p>
         </div>
         <div className="mt-6 overflow-x-auto">

@@ -3,18 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --disable-warning=DEP0108 node_modules/next/dist/bin/next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
     "inspect:finance": "node --env-file=.env.local scripts/inspect-finance.mjs",
-    "inspect:music": "node --env-file=.env.local scripts/inspect-music.mjs"
+    "inspect:music": "node --env-file=.env.local scripts/inspect-music.mjs",
+    "inspect:meditation": "node --env-file=.env.local scripts/inspect-meditation.mjs",
+    "inspect:games": "node --env-file=.env.local scripts/inspect-games.mjs",
+    "inspect:secret": "node --env-file=.env.local scripts/inspect-secret.mjs",
+    "inspect:recipes": "node --env-file=.env.local scripts/inspect-recipes-doc.mjs",
+    "inspect:hikes": "node --env-file=.env.local scripts/inspect-hikes-doc.mjs"
   },
   "dependencies": {
     "googleapis": "^181.0.0",
-    "next": "16.3.5",
+    "next": "^16.4.3",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -24,7 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.5",
+    "eslint-config-next": "^16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^2.1.9"
