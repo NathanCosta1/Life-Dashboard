@@ -48,10 +48,10 @@ const financeAreas = [
 export default function FinancePage() {
   return (
     <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
-      <p className="text-sm font-medium text-muted-foreground">Module home</p>
+      <p className="finance-kicker">Finance</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Finance</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">
-        A financial command center for exploring each connected data area.
+        Budget, investments, net worth, income, and related planning areas.
       </p>
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-label="Finance areas">

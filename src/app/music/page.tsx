@@ -16,7 +16,7 @@ const musicAreas = [
 export default function MusicPage() {
   return (
     <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
-      <p className="text-sm font-medium text-muted-foreground">Module home</p>
+      <p className="text-sm font-medium tracking-[0.18em] text-[#f2b66f] uppercase">Music</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Music</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">
         Pick your next album or look back at the music you saved each year.

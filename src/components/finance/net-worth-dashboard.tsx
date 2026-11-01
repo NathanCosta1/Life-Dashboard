@@ -28,7 +28,6 @@ export function NetWorthDashboard({ model }: { model: NetWorthDashboardModel }) 
     : "";
   return (
     <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
-      <p className="text-sm font-medium text-muted-foreground">Finance / Net worth</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Net worth</h1>
       <p className="mt-2 max-w-xl text-muted-foreground">Historical net-worth values from the verified source block.</p>
       {model.latest ? (

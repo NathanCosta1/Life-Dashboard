@@ -43,10 +43,17 @@ npm run inspect:finance
 This discovers every tab and reports its dimensions, headers, populated-value
 counts, and basic inferred types. It intentionally does not print cell contents.
 
-## Project phases
+## Current modules
 
-- [Phase 1: Foundation & Integration De-risking](./PHASE_1_MVP.md) — complete.
-- [Phase 2: Financial Dashboard](./PHASE_2_FINANCES.md) — next.
+- Dashboard
+- Finance
+- Music
+- Games
+- Meditation
+- Hikes
+- Recipes
+- Secret
+- Future placeholders for Fitness and Career
 
 ## Getting Started
 

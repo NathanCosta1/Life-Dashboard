@@ -1,0 +1,254 @@
+.hikes-theme {
+  min-height: calc(100vh - 64px);
+  color: #263126;
+  background:
+    radial-gradient(circle at 82% 8%, rgba(177, 112, 58, 0.12), transparent 18rem),
+    repeating-radial-gradient(ellipse at 10% 120%, transparent 0 42px, rgba(54, 78, 55, 0.055) 43px 44px),
+    #ece8d7;
+  padding: 36px clamp(18px, 4vw, 52px) 64px;
+}
+
+.hikes-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  gap: 22px;
+  align-items: end;
+  border-bottom: 2px solid #314b36;
+  padding-bottom: 20px;
+}
+.hikes-kicker { color: #9c5935; font-size: 11px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+.hikes-header h1 {
+  margin-top: 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(48px, 7vw, 82px);
+  line-height: .92;
+  letter-spacing: -.055em;
+}
+.hikes-subtitle { margin-top: 12px; color: #68705f; font-size: 13px; font-weight: 700; }
+.hikes-mountain {
+  position: relative;
+  min-height: 210px;
+  overflow: hidden;
+  border-radius: 3px 52px 3px 3px;
+  border: 1px solid #526a55;
+  background: linear-gradient(145deg, #d7d1aa 0%, #aab493 100%);
+  box-shadow: 9px 9px 0 rgba(156, 89, 53, .28);
+}
+.hikes-mountain-sun {
+  position: absolute;
+  top: 26px;
+  right: 68px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(246, 220, 153, .75);
+  box-shadow: 0 0 0 12px rgba(246, 220, 153, .12);
+}
+.hikes-mountain svg { position: absolute; inset: 24px 0 0; width: 100%; height: calc(100% - 24px); }
+.hikes-mountain-far { fill: #839578; opacity: .88; }
+.hikes-mountain-near { fill: #405d47; }
+.hikes-mountain .hikes-trail { fill: none; stroke: #d9c789; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 3 8; }
+.hikes-mountain svg circle { fill: #c68a54; stroke: #f4efdc; stroke-width: 3; }
+.hikes-mountain > span, .hikes-mountain > strong {
+  position: absolute;
+  left: 18px;
+  z-index: 2;
+  color: #f6f2df;
+}
+.hikes-mountain > span { bottom: 38px; max-width: 68%; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.hikes-mountain > strong { bottom: 15px; font-family: Georgia, serif; font-size: 25px; }
+
+.hikes-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+.hikes-metrics article {
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 3px solid #6d8067;
+  border-bottom: 1px solid #c5bea4;
+  padding: 12px;
+  background: rgba(248, 245, 230, .65);
+}
+.hikes-metrics strong { font-family: Georgia, serif; font-size: 20px; line-height: 1.05; }
+.hikes-metrics article:first-child strong { font-size: 28px; }
+.hikes-metrics span { color: #70775f; font-size: 11px; }
+
+.hikes-states {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+  border: 1px solid #bdb69c;
+  border-left: 4px solid #314b36;
+  padding: 16px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 13px, rgba(49, 75, 54, .025) 14px 15px),
+    rgba(248, 245, 230, .72);
+}
+.hikes-states-heading { display: flex; flex-direction: column; justify-content: end; }
+.hikes-states-heading p { color: #9c5935; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.hikes-states-heading h2 { margin-top: 4px; font-family: Georgia, serif; font-size: 28px; }
+.hikes-state-ridges { min-height: 150px; display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 8px; align-items: end; }
+.hikes-state-ridges button {
+  height: 150px;
+  display: grid;
+  grid-template-rows: 78px auto auto;
+  gap: 4px;
+  border: 0;
+  border-bottom: 1px solid #bdb69c;
+  padding: 0 6px 8px;
+  background: transparent;
+  color: #263126;
+  text-align: left;
+  cursor: pointer;
+}
+.hikes-state-ridges button:hover, .hikes-state-ridges button.is-active { background: rgba(49, 75, 54, .08); }
+.hikes-state-ridge { height: 78px; display: flex; align-items: end; }
+.hikes-state-ridge i {
+  width: 100%;
+  height: var(--state-height);
+  display: block;
+  clip-path: polygon(0 100%, 28% 100%, 51% 18%, 70% 100%, 100% 100%);
+  background: linear-gradient(135deg, #839578 0 48%, #526b55 49% 100%);
+  transition: height .2s ease;
+}
+.hikes-state-ridges strong { overflow: hidden; font-family: Georgia, serif; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.hikes-state-ridges small { color: #777d69; font-size: 9px; line-height: 1.3; }
+
+.hikes-profile {
+  border-top: 1px solid #c4bea7;
+  border-bottom: 1px solid #c4bea7;
+  margin-top: 18px;
+  padding: 14px 0 10px;
+}
+.hikes-profile-heading { display: flex; justify-content: space-between; align-items: end; }
+.hikes-profile-heading p { color: #9c5935; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.hikes-profile-heading strong { display: block; margin-top: 2px; font-family: Georgia, serif; font-size: 21px; }
+.hikes-profile-heading > span { color: #777d69; font-size: 11px; }
+.hikes-bars { height: 150px; display: flex; align-items: end; gap: clamp(12px, 4vw, 48px); padding: 18px 5% 0; }
+.hikes-bar-column { height: 100%; flex: 1; display: grid; grid-template-rows: 24px 1fr 18px; align-items: end; text-align: center; }
+.hikes-bar-value { color: #68705f; font-size: 10px; }
+.hikes-bar-track { height: 100%; display: flex; align-items: end; border-bottom: 1px solid #7a806c; }
+.hikes-bar-track i { width: 100%; display: block; border-radius: 2px 2px 0 0; background: linear-gradient(180deg, #a86a42, #526b55); }
+.hikes-bar-column > span:last-child { margin-top: 5px; font-size: 11px; font-weight: 800; }
+
+.hikes-controls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 150px 180px 190px;
+  gap: 10px;
+  margin-top: 18px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #314b36;
+}
+.hikes-controls label { display: grid; gap: 5px; }
+.hikes-controls label > span { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.hikes-controls input, .hikes-controls select {
+  width: 100%; height: 42px; border: 1px solid #aaa58e; border-radius: 2px; padding: 0 10px;
+  background: rgba(250, 248, 236, .9); color: #263126;
+}
+.hikes-filter-buttons { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.hikes-filter-buttons button {
+  min-height: 36px; border: 1px solid #aaa58e; border-radius: 999px; padding: 7px 11px;
+  background: transparent; color: #626754; font-size: 12px; cursor: pointer;
+}
+.hikes-filter-buttons button.is-active { border-color: #314b36; background: #314b36; color: #f7f3e4; }
+
+.hikes-records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.hikes-records button {
+  min-height: 80px; display: grid; gap: 4px; border: 1px solid #bbb49b; border-left: 4px solid #9c5935;
+  padding: 12px; text-align: left; background: rgba(248, 245, 230, .7); color: #263126; cursor: pointer;
+}
+.hikes-records button:disabled { opacity: .7; cursor: default; }
+.hikes-records span { color: #777d69; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.hikes-records strong { font-family: Georgia, serif; font-size: 16px; }
+.hikes-records small { color: #9c5935; font-weight: 800; }
+
+.hikes-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.hikes-grid article {
+  position: relative; min-height: 230px; display: flex; flex-direction: column;
+  border: 1px solid #c0baa0; border-radius: 2px 18px 2px 2px; padding: 18px 18px 14px;
+  background:
+    linear-gradient(135deg, transparent 60%, rgba(79, 106, 78, .06)),
+    rgba(248, 245, 230, .82);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.hikes-grid article:hover, .hikes-grid article:focus-visible {
+  transform: translateY(-3px); box-shadow: 0 9px 22px rgba(67, 71, 55, .12);
+  outline: 2px solid #526a55; outline-offset: 2px;
+}
+.hikes-card-number {
+  position: absolute; top: 14px; right: 14px; min-width: 38px; height: 38px; display: grid; place-items: center;
+  border: 1px solid #a7a58f; border-radius: 50%; color: #77806c; font-family: Georgia, serif; font-size: 13px;
+}
+.hikes-card-location { max-width: calc(100% - 48px); color: #9c5935; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.hikes-grid h2 { max-width: calc(100% - 48px); margin-top: 10px; font-family: Georgia, serif; font-size: 22px; line-height: 1.05; }
+.hikes-card-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 14px; }
+.hikes-card-stats span:last-child { grid-column: 1 / -1; }
+.hikes-card-stats strong { font-size: 12px; }
+.hikes-card-note { display: -webkit-box; overflow: hidden; margin-top: 12px; color: #68705f; font-size: 12px; line-height: 1.45; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.hikes-card-footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px solid #d3cdb5; color: #777d69; font-size: 10px; font-weight: 800; }
+.hikes-card-footer span:last-child { color: #9c5935; }
+.hikes-empty { grid-column: 1 / -1; min-height: 220px; display: grid; place-items: center; align-content: center; gap: 14px; border: 1px dashed #aaa58e; }
+.hikes-empty h2 { font-family: Georgia, serif; }
+.hikes-empty button, .hikes-dialog-nav button, .hikes-photo-link { border: 1px solid #314b36; border-radius: 999px; padding: 9px 12px; background: #314b36; color: #f7f3e4; font-size: 12px; font-weight: 800; }
+
+.hikes-dialog { width: min(660px, calc(100vw - 32px)); border: 0; border-radius: 3px 24px 3px 3px; padding: 0; background: #f7f3e4; color: #263126; box-shadow: 18px 18px 0 rgba(49,75,54,.24); }
+.hikes-dialog::backdrop { background: rgba(38,49,38,.58); backdrop-filter: blur(4px); }
+.hikes-dialog > div { position: relative; max-height: 82vh; overflow-y: auto; padding: 34px; }
+.hikes-dialog-close { position: absolute; top: 12px; right: 12px; border: 0; background: transparent; color: #9c5935; font-size: 12px; font-weight: 800; cursor: pointer; }
+.hikes-dialog-index { color: #9c5935; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.hikes-dialog h2 { max-width: 540px; margin-top: 14px; font-family: Georgia, serif; font-size: 38px; line-height: 1.04; }
+.hikes-dialog-location { margin-top: 8px; color: #68705f; }
+.hikes-dialog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 20px; }
+.hikes-dialog-grid article { min-height: 82px; display: flex; flex-direction: column; justify-content: space-between; border-top: 3px solid #75836e; padding: 10px; background: rgba(225, 222, 202, .55); }
+.hikes-dialog-grid span { color: #777d69; font-size: 10px; text-transform: uppercase; }
+.hikes-dialog-grid strong { font-family: Georgia, serif; font-size: 17px; }
+.hikes-dialog-notes { display: grid; gap: 8px; margin-top: 18px; color: #515846; line-height: 1.55; }
+.hikes-photo-link { display: inline-block; margin-top: 16px; text-decoration: none; }
+.hikes-no-photo { margin-top: 16px; color: #777d69; font-size: 12px; }
+.hikes-dialog-nav { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 14px; border-top: 1px solid #cbc5aa; }
+.hikes-dialog-nav button:disabled { opacity: .45; cursor: not-allowed; }
+
+.hikes-loading { min-height: 100vh; padding: 36px clamp(18px, 4vw, 52px); background: #ece8d7; }
+.hikes-loading-header { width: 62%; height: 90px; background: #ddd8c1; }
+.hikes-loading-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 38px; }
+.hikes-loading-metrics span { height: 92px; background: #e4dfca; }
+.hikes-loading-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 100px; }
+.hikes-loading-grid span { height: 230px; border-radius: 2px 18px 2px 2px; background: #e4dfca; }
+.hikes-source-error { max-width: 620px; margin: 40px; border-left: 5px solid #9c5935; padding: 28px; background: #f7f3e4; }
+.hikes-source-error h1 { margin-top: 8px; font-family: Georgia, serif; font-size: 32px; }
+.hikes-source-error p { margin-top: 10px; }
+.hikes-source-error button { margin-top: 18px; border: 0; border-radius: 999px; padding: 9px 12px; background: #314b36; color: white; font-weight: 800; }
+
+@media (max-width: 1100px) {
+  .hikes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hikes-controls { grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(130px, .55fr)); }
+}
+@media (max-width: 800px) {
+  .hikes-header { grid-template-columns: 1fr; }
+  .hikes-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hikes-states { grid-template-columns: 1fr; }
+  .hikes-states-heading { display: block; }
+  .hikes-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hikes-filter-buttons { grid-column: 1 / -1; }
+  .hikes-dialog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hikes-loading-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .hikes-theme { padding-top: 24px; }
+  .hikes-header h1 { font-size: 46px; }
+  .hikes-mountain { min-height: 180px; }
+  .hikes-metrics, .hikes-records, .hikes-grid, .hikes-controls { grid-template-columns: 1fr; }
+  .hikes-profile-heading > span { display: none; }
+  .hikes-bars { gap: 10px; padding-inline: 2px; }
+  .hikes-dialog > div { padding: 28px 20px; }
+  .hikes-dialog h2 { font-size: 31px; }
+  .hikes-dialog-grid { grid-template-columns: 1fr 1fr; }
+  .hikes-loading-metrics, .hikes-loading-grid { grid-template-columns: repeat(2, 1fr); }
+}
