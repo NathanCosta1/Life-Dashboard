@@ -16,10 +16,10 @@ export function HousingDashboard({ model }: { model: HousingDashboardModel }) {
         <Metric label="Monthly average" value={formatCurrency(model.monthlyAverage)} detail="Recorded monthly totals" />
         <Metric label="Move-in costs" value={formatCurrency(model.moveInTotal)} detail="Non-recurring charges" />
         <Metric label="Setup & furnishing" value={formatCurrency(model.itemsTotal)} detail="Items section total" />
-        <Metric label="Monthly records" value={String(model.monthly.length)} detail="Rows in the source table" />
+        <Metric label="Monthly records" value={String(model.monthly.length)} detail="Recorded months" />
       </div>
       <section className="mt-6 rounded-xl border bg-card p-5">
-        <div className="flex items-center justify-between"><div><h2 className="font-medium">Monthly housing costs</h2><p className="mt-1 text-sm text-muted-foreground">Recurring totals from the apartment sheet.</p></div><span className="text-sm text-muted-foreground">Water and electric vary</span></div>
+        <div className="flex items-center justify-between"><div><h2 className="font-medium">Monthly housing costs</h2><p className="mt-1 text-sm text-muted-foreground">Recurring apartment totals.</p></div><span className="text-sm text-muted-foreground">Water and electric vary</span></div>
         <div className="mt-6 flex h-64 items-end gap-3 overflow-x-auto border-b border-border pb-8">
           {model.monthly.map((row) => <div key={row.location.rowNumber} className="flex h-full min-w-16 flex-1 flex-col justify-end gap-2 text-center"><span className="text-xs tabular-nums text-muted-foreground">{formatCurrency(row.total)}</span><div className="rounded-t-md bg-cyan-400/80" style={{ height: `${row.total === null ? 0 : Math.max(4, (row.total / maxMonthly) * 82)}%` }} /><span className="text-xs text-muted-foreground">{row.month.replace(/\s+2026$/, "").slice(0, 3)}</span></div>)}
         </div>

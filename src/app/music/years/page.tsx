@@ -34,7 +34,7 @@ export default async function MusicYearsPage() {
   );
 
   return (
-    <main className="pt-6">
+    <div className="pt-6">
       <div className="max-w-3xl">
         <p className="text-sm font-medium text-amber-200">Replay & Everything</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -57,11 +57,10 @@ export default async function MusicYearsPage() {
         <div className="mt-8 rounded-2xl border bg-card p-6">
           <p className="font-medium">No annual playlists found</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            The configured sheet does not contain a recognized Replay or
-            year-specific Everything playlist yet.
+            No recognized Replay or year-specific playlist is available yet.
           </p>
         </div>
       )}
-    </main>
+    </div>
   );
 }

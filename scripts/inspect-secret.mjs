@@ -27,28 +27,10 @@ for (const sheet of metadata.data.sheets ?? []) {
   if (!title) continue;
   const rowCount = sheet.properties?.gridProperties?.rowCount ?? 0;
   const columnCount = sheet.properties?.gridProperties?.columnCount ?? 0;
-  const rowLimit = Math.min(rowCount, 2500);
-  const escapedTitle = title.replaceAll("'", "''");
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `'${escapedTitle}'!A1:Z${rowLimit}`,
-    majorDimension: "ROWS",
-  });
-  const rows = response.data.values ?? [];
-  const populatedRows = rows.filter((row) => row.some((cell) => String(cell ?? "").trim()));
   output.push({
     title,
     declaredRows: rowCount,
     declaredColumns: columnCount,
-    returnedRows: rows.length,
-    populatedRows: populatedRows.length,
-    firstRows: rows.slice(0, 12),
-    populatedCellsByColumn: rows.reduce((counts, row) => {
-      row.forEach((cell, index) => {
-        if (String(cell ?? "").trim()) counts[index] = (counts[index] ?? 0) + 1;
-      });
-      return counts;
-    }, {}),
   });
 }
 

@@ -2,10 +2,11 @@
 
 import { timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
-import { VAULT_COOKIE } from "@/lib/vault/session";
+import { createVaultSessionValue, VAULT_COOKIE } from "@/lib/vault/session";
 
 function verifyCode(code: string): boolean {
-  const expected = process.env.SECRET_VAULT_PIN ?? "7823";
+  const expected = process.env.SECRET_VAULT_PIN;
+  if (!expected || !/^\d{4}$/.test(expected)) return false;
   const provided = Buffer.from(code);
   const target = Buffer.from(expected);
   return provided.length === target.length && timingSafeEqual(provided, target);
@@ -13,8 +14,10 @@ function verifyCode(code: string): boolean {
 
 export async function unlockVault(code: string): Promise<{ ok: boolean }> {
   if (!/^\d{4}$/.test(code) || !verifyCode(code)) return { ok: false };
+  const sessionSecret = process.env.SECRET_VAULT_SESSION_SECRET;
+  if (!sessionSecret) return { ok: false };
   const cookieStore = await cookies();
-  cookieStore.set(VAULT_COOKIE, "1", {
+  cookieStore.set(VAULT_COOKIE, createVaultSessionValue(sessionSecret), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

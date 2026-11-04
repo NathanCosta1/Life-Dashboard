@@ -377,8 +377,7 @@
   .games-pick-controls { align-items: stretch; flex-direction: column; }
   .games-metrics { grid-template-columns: repeat(2, 1fr); }
   .games-analog-grid, .games-list { grid-template-columns: 1fr; }
-  .games-table th:nth-child(3), .games-table td:nth-child(3),
-  .games-table th:nth-child(5), .games-table td:nth-child(5) { display: none; }
+  .games-table { min-width: 620px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

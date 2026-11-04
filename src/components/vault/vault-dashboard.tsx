@@ -64,7 +64,7 @@ function VaultGate({ onUnlocked }: { onUnlocked: () => void }) {
       <Link href="/misc" className="vault-back-link">
         <span aria-hidden="true">←</span> Back to MISC
       </Link>
-      <main className="vault-terminal" aria-label="Private vault access">
+      <div className="vault-terminal" aria-label="Private vault access">
         <header className="vault-terminal-header">
           <span>PRIVATE NODE // SECRET</span>
           <span>{statusText}</span>
@@ -88,7 +88,7 @@ function VaultGate({ onUnlocked }: { onUnlocked: () => void }) {
           <button type="button" onClick={() => enterDigit("0")} disabled={status === "verifying" || status === "granted"}><span>0</span></button>
           <button type="button" className="vault-key-enter" onClick={() => setAttempt((value) => value + 1)} aria-label="Submit sequence" disabled={digits.length !== 4}>ENT</button>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

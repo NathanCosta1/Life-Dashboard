@@ -48,6 +48,21 @@
   margin-bottom: 38px;
 }
 
+.meditation-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #bcb0ca;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.meditation-back-link:hover,
+.meditation-back-link:focus-visible { color: var(--meditation-lavender); }
+
 .meditation-header h1,
 .meditation-empty h1,
 .meditation-error h1 {
@@ -296,24 +311,30 @@
 
 .meditation-lower-grid { display: grid; grid-template-columns: 1fr 0.82fr; gap: clamp(30px, 5vw, 80px); }
 .constellation { position: relative; height: 300px; }
+.constellation-list { position: static; height: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .constellation-node {
-  position: absolute;
-  width: var(--constellation-size);
-  height: var(--constellation-size);
-  border: 1px solid rgba(215, 167, 255, 0.24);
-  border-radius: 48% 52% 56% 44%;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle, rgba(215, 167, 255, 0.26), rgba(90, 56, 127, 0.12) 62%, transparent 64%);
+  position: relative;
+  min-height: 126px;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(215, 167, 255, 0.18);
+  border-radius: 18px 18px 18px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 16px;
+  background: linear-gradient(145deg, rgba(215, 167, 255, 0.12), rgba(90, 56, 127, 0.04));
   color: white;
   box-shadow: 0 0 28px rgba(215, 167, 255, 0.08);
 }
-.constellation-node span { font-size: 11px; color: #c9bdd6; }
-.constellation-node strong { position: absolute; font-family: Georgia, serif; font-size: 24px; }
-.constellation-1 { left: 12%; top: 48px; }
-.constellation-2 { left: 42%; top: 10px; }
-.constellation-3 { right: 10%; top: 90px; }
-.constellation-4 { left: 38%; bottom: 10px; }
+.constellation-node span { font-size: 12px; color: #c9bdd6; text-transform: uppercase; letter-spacing: 0.08em; }
+.constellation-node strong { position: static; margin-top: 8px; font-family: Georgia, serif; font-size: 34px; }
+.constellation-node small { margin-top: 4px; color: var(--meditation-coral); }
+.constellation-1,
+.constellation-2,
+.constellation-3,
+.constellation-4 { left: auto; right: auto; top: auto; bottom: auto; }
 .constellation-table { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .constellation-table div { padding: 12px 14px; border-left: 1px solid rgba(215, 167, 255, 0.14); }
 .constellation-table span, .constellation-table strong, .constellation-table small { display: block; }
@@ -429,7 +450,8 @@
   .meditation-lower-grid { gap: 20px; }
   .record-orbits { grid-template-columns: repeat(2, 1fr); }
   .record-orbits article { aspect-ratio: 1.1; border-radius: 38%; }
-  .constellation { height: 280px; }
+  .constellation { height: auto; }
+  .constellation-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .copy-button { display: none; }
 }
 

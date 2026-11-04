@@ -16,6 +16,20 @@
   border-bottom: 2px solid #314b36;
   padding-bottom: 20px;
 }
+.hikes-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #68705f;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.hikes-back-link:hover,
+.hikes-back-link:focus-visible { color: #9c5935; }
 .hikes-kicker { color: #9c5935; font-size: 11px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
 .hikes-header h1 {
   margin-top: 4px;

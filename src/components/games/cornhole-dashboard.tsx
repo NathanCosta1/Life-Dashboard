@@ -13,7 +13,7 @@ export function CornholeDashboard({ data }: { data: CornholeLibrary }) {
   const drill = data.drills.find((item) => item.drill === selected) ?? data.drills[0];
 
   return (
-    <main className="cornhole-page">
+    <div className="cornhole-page">
       <Link href="/games" className="cornhole-back"><span aria-hidden="true">←</span> Games directory</Link>
       <header className="cornhole-header">
         <div><p>Game record / bags</p><h1>Cornhole</h1></div>
@@ -62,7 +62,7 @@ export function CornholeDashboard({ data }: { data: CornholeLibrary }) {
           </section>
         </>
       )}
-      {data.issues.length > 0 && <section className="cornhole-issues"><p>Source records needing review</p>{data.issues.map((issue) => <div key={`${issue.rowNumber}-${issue.field}`}>Row {issue.rowNumber}: {issue.message}</div>)}</section>}
-    </main>
+      {data.issues.length > 0 && <section className="cornhole-issues"><p>Entries needing review</p>{data.issues.map((issue) => <div key={`${issue.rowNumber}-${issue.field}`}>{issue.message}</div>)}</section>}
+    </div>
   );
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function MiscPage() {
   return (
-    <main className="misc-index">
+    <div className="misc-index">
       <Link href="/" className="misc-back-link">
         <span aria-hidden="true">←</span> Life Dashboard
       </Link>
@@ -36,6 +36,6 @@ export default function MiscPage() {
           <strong aria-hidden="true">→</strong>
         </Link>
       </section>
-    </main>
+    </div>
   );
 }

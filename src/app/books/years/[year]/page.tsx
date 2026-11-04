@@ -21,7 +21,7 @@ export default async function BooksYearPage({
   }));
 
   return (
-    <main className="books-catalog books-year-room">
+    <div className="books-catalog books-year-room">
       <Link href="/books" className="books-back-link" aria-label="Back to Books library">
         <span aria-hidden="true">←</span> The Library
       </Link>
@@ -48,6 +48,6 @@ export default async function BooksYearPage({
           ))}
         </ol>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import type { MeditationData, MeditationDay, MeditationYearData } from "@/lib/meditation/types";
 import "./meditation.css";
 
@@ -12,7 +13,11 @@ function subscribeToday() {
 }
 
 function getClientTodayIso() {
-  return new Date().toISOString().slice(0, 10);
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function getServerTodayIso() {
@@ -36,6 +41,7 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
   const [trendMode, setTrendMode] = useState<"daily" | "7-day" | "30-day">("7-day");
   const [weekdayMode, setWeekdayMode] = useState<"Minutes" | "Active days">("Minutes");
   const [selectedDay, setSelectedDay] = useState<MeditationDay | null>(null);
+  const [copyMessage, setCopyMessage] = useState("");
   const todayIso = useSyncExternalStore(subscribeToday, getClientTodayIso, getServerTodayIso);
 
   const latest = year?.sessions.reduce<MeditationYearData["sessions"][number] | null>(
@@ -76,7 +82,7 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
       <div className="meditation-shell meditation-empty">
         <p className="meditation-kicker">Meditation</p>
         <h1>No practice found yet</h1>
-        <p>Add a valid `Date`, `Duration`, and start-time row to the configured workbook.</p>
+        <p>Add a valid date, duration, and start time to begin the practice history.</p>
       </div>
     );
   }
@@ -93,7 +99,12 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
     : null;
   const copySummary = async () => {
     const text = `${year.year} meditation: ${year.summary.totalSessions} sessions, ${formatMinutes(year.summary.totalMinutes)}, ${year.summary.activeDays} active days, ${year.summary.longestStreak}-day longest streak.`;
-    await navigator.clipboard?.writeText(text);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyMessage("Summary copied");
+    } catch {
+      setCopyMessage("Copy was not available");
+    }
   };
 
   const changeMonth = (offset: number) => {
@@ -108,6 +119,9 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
       <div className="meditation-ambient" aria-hidden="true" />
       <header className="meditation-header">
         <div>
+          <Link className="meditation-back-link" href="/" aria-label="Back to Life Dashboard">
+            <span aria-hidden="true">←</span> Dashboard
+          </Link>
           <p className="meditation-kicker">Meditation practice</p>
           <h1>{year.year} in stillness</h1>
         </div>
@@ -124,6 +138,7 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
             Motion: {motion}
           </button>
           <button type="button" className="copy-button" onClick={copySummary}>Copy summary</button>
+          <span className="sr-only" aria-live="polite">{copyMessage}</span>
         </div>
       </header>
 
@@ -257,19 +272,16 @@ export function MeditationDashboard({ data }: { data: MeditationData }) {
               <h2 id="constellation-title">Time of day</h2>
             </div>
           </div>
-          <div className="constellation">
+          <div className="constellation constellation-list" aria-label="Meditation sessions by time of day">
             {year.timeOfDay.map((bucket, index) => (
-              <button
-                type="button"
+              <article
                 key={bucket.name}
                 className={`constellation-node constellation-${index + 1}`}
-                style={{ "--constellation-size": String(72 + Math.min(60, bucket.sessionCount * 0.7)) } as React.CSSProperties}
-                onClick={() => setSelectedDay(bucket.sessionCount ? year.days.find((day) => day.sessions.some((session) => session.timeOfDay === bucket.name)) ?? null : null)}
-                aria-label={`${bucket.name}: ${bucket.sessionCount} sessions, ${formatMinutes(bucket.totalMinutes)}, ${bucket.share.toFixed(0)} percent of sessions`}
               >
                 <span>{bucket.name}</span>
                 <strong>{bucket.sessionCount}</strong>
-              </button>
+                <small>{bucket.share.toFixed(0)}% of sessions</small>
+              </article>
             ))}
           </div>
           <div className="constellation-table">

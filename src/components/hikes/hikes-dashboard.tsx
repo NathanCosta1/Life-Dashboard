@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { filterAndSortHikes } from "@/lib/hikes/parser";
 import type { Hike, HikingLibrary } from "@/lib/hikes/types";
 
@@ -92,6 +93,9 @@ export function HikesDashboard({ data }: { data: HikingLibrary }) {
     <div className="hikes-theme">
       <header className="hikes-header">
         <div>
+          <Link className="hikes-back-link" href="/" aria-label="Back to Life Dashboard">
+            <span aria-hidden="true">←</span> Dashboard
+          </Link>
           <p className="hikes-kicker">Field journal / trail index</p>
           <h1>Hike journal</h1>
           <p className="hikes-subtitle">{data.hikes.length} recorded hikes</p>
@@ -113,7 +117,7 @@ export function HikesDashboard({ data }: { data: HikingLibrary }) {
         <article><strong>{data.hikes.length}</strong><span>Recorded hikes</span></article>
         <article><strong>{data.totalLengthMiles.toFixed(1)} mi</strong><span>Total recorded distance</span></article>
         <article><strong>{data.totalElevationGainFeet.toLocaleString()} ft</strong><span>Total recorded gain</span></article>
-        <article><strong>{mostRecent?.title ?? "None recorded"}</strong><span>Latest source entry</span></article>
+        <article><strong>{mostRecent?.title ?? "None recorded"}</strong><span>Latest hike</span></article>
       </section>
 
       <section className="hikes-states" aria-labelledby="hikes-states-title">

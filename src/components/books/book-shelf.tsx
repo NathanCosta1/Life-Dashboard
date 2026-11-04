@@ -60,7 +60,7 @@ export function BookShelf({
         <div>
           <p className="books-kicker"><Link href="/books">The Library</Link> / {eyebrow}</p>
           <h1>{title}</h1>
-          <p className="books-shelf-count">{books.length} source records</p>
+          <p className="books-shelf-count">{books.length} books</p>
         </div>
         <label className="books-search">
           <span>Search this shelf</span>
@@ -110,7 +110,7 @@ export function BookShelf({
       <aside className="books-shelf-authors" aria-label={`Author frequency on ${title}`}>
         <div className="books-panel-heading">
           <p>Authors on this shelf</p>
-          <span>Exact source author strings</span>
+          <span>Cataloged authors</span>
         </div>
         <ol className="books-author-list">
           {authorCounts.map((item, index) => (

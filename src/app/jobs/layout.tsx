@@ -4,7 +4,7 @@ import "./jobs.css";
 
 export const metadata: Metadata = {
   title: "Jobs | Life Dashboard",
-  description: "Career roles, dates, compensation type, and source notes.",
+  description: "Career roles, dates, compensation, and notes.",
 };
 
 export default function JobsLayout({ children }: { children: ReactNode }) {

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function FitnessPage() {
   return (
-    <main className="basketball-page">
+    <div className="basketball-page">
       <Link href="/" className="basketball-back"><span aria-hidden="true">←</span> Life Dashboard</Link>
       <section className="fitness-directory">
         <header className="basketball-header">
@@ -15,6 +15,6 @@ export default function FitnessPage() {
           <span>02</span><div><p>Finish-line archive</p><h2>Races</h2><small>Results, times, and race-day notes</small></div><strong aria-hidden="true">→</strong>
         </Link>
       </section>
-    </main>
+    </div>
   );
 }

@@ -12,7 +12,7 @@ export function ModulePage({ title, description }: ModulePageProps) {
       <div className="mt-8 rounded-xl border bg-card p-6">
         <p className="text-sm font-medium">Coming soon</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          This module is part of the Life Dashboard shell and will be connected in a future task.
+          This module is not available yet.
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { BookLibrary, BookRecord } from "@/lib/books/types";
 
 type Props = {
@@ -19,6 +19,49 @@ function sortByTitle(a: BookRecord, b: BookRecord) {
 export function BooksDashboard({ data }: Props) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<BookRecord | null>(null);
+  const dialogRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const closeDetails = () => {
+    setSelected(null);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (!selected) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeDetails();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ));
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selected]);
   const normalizedSearch = search.trim().toLocaleLowerCase();
   const years = useMemo(
     () => Object.entries(data.readByYear).sort(([a], [b]) => a.localeCompare(b)),
@@ -66,7 +109,14 @@ export function BooksDashboard({ data }: Props) {
           <p>{searchResults.length === 12 ? "First 12 matches" : `${searchResults.length} matches`}</p>
           <div>
             {searchResults.map((book) => (
-              <button key={book.id} type="button" onClick={() => setSelected(book)}>
+              <button
+                key={book.id}
+                type="button"
+                onClick={(event) => {
+                  triggerRef.current = event.currentTarget;
+                  setSelected(book);
+                }}
+              >
                 <span>{book.title}</span>
                 <small>{book.author}</small>
               </button>
@@ -154,7 +204,7 @@ export function BooksDashboard({ data }: Props) {
         <article>
           <div className="books-panel-heading">
             <p>Catalog notes</p>
-            <span>Source-supported totals</span>
+            <span>Catalog summary</span>
           </div>
           <dl className="books-catalog-notes">
             <div><dt>Reviews present</dt><dd>{reviewCount}</dd></div>
@@ -166,11 +216,11 @@ export function BooksDashboard({ data }: Props) {
 
       {data.issues.length > 0 && (
         <details className="books-source-notes">
-          <summary>{data.issues.length} source rows need attention</summary>
+          <summary>{data.issues.length} entries need attention</summary>
           <ul>
             {data.issues.slice(0, 20).map((issue, index) => (
               <li key={`${issue.rowNumber}-${issue.field}-${index}`}>
-                Row {issue.rowNumber}: {issue.field} — {issue.message}
+                {issue.field}: {issue.message}
               </li>
             ))}
           </ul>
@@ -199,15 +249,16 @@ export function BooksDashboard({ data }: Props) {
       </section>
 
       {selected && (
-        <div className="books-detail-backdrop" role="presentation" onMouseDown={() => setSelected(null)}>
+        <div className="books-detail-backdrop" role="presentation" onMouseDown={closeDetails}>
           <section
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={`${selected.title} details`}
             className="books-detail"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <button className="books-detail-close" type="button" onClick={() => setSelected(null)} aria-label="Close book details">×</button>
+            <button ref={closeButtonRef} className="books-detail-close" type="button" onClick={closeDetails} aria-label="Close book details">×</button>
             <p className="books-kicker">{selected.exclusiveShelf}</p>
             <h2>{selected.title}</h2>
             <p className="books-detail-author">{selected.author}</p>

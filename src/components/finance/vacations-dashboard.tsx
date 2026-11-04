@@ -16,7 +16,7 @@ export function VacationsDashboard({ model }: { model: VacationDashboardModel })
     <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
       <p className="text-sm font-medium text-muted-foreground">Finance / Vacations</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Vacations</h1>
-      <p className="mt-2 max-w-xl text-muted-foreground">Trip history, spending, and duration across the travel workbook.</p>
+      <p className="mt-2 max-w-xl text-muted-foreground">Trip history, spending, and duration.</p>
       <div className="mt-8 flex flex-wrap gap-2" role="tablist" aria-label="Vacation years">
         <button type="button" onClick={() => setYear("all")} className={`rounded-lg border px-3 py-2 text-sm ${year === "all" ? "bg-accent" : "bg-card"}`}>Overview</button>
         {model.years.map((item) => <button type="button" key={item} onClick={() => setYear(item)} className={`rounded-lg border px-3 py-2 text-sm ${year === item ? "bg-accent" : "bg-card"}`}>{item}</button>)}

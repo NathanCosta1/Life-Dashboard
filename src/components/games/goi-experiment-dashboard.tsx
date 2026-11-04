@@ -38,7 +38,7 @@ export function GoiExperimentDashboard({ data }: { data: GoiExperimentLibrary })
   const overTwoThirty = allRuns.filter((run) => run > 150).length;
 
   return (
-    <main className="goi-experiment">
+    <div className="goi-experiment">
       <nav className="goi-nav" aria-label="Breadcrumb">
         <Link href="/games/random" className="games-back-link"><span aria-hidden="true">←</span> Random</Link>
         <span>Games / Random 01</span>
@@ -47,7 +47,7 @@ export function GoiExperimentDashboard({ data }: { data: GoiExperimentLibrary })
         <div><p>Run-time record / 200 consecutive runs</p><h1>GOI Experiment</h1></div>
         {data.sourceNote && <blockquote>{data.sourceNote}</blockquote>}
       </header>
-      {data.issues.length > 0 && <section className="goi-issues" role="status">{data.issues.map((issue) => <p key={`${issue.rowNumber}-${issue.field}`}>Row {issue.rowNumber}: {issue.message}</p>)}</section>}
+      {data.issues.length > 0 && <section className="goi-issues" role="status">{data.issues.map((issue) => <p key={`${issue.rowNumber}-${issue.field}`}>{issue.message}</p>)}</section>}
       <section className="goi-metrics" aria-label="Overall run summary">
         <article><span>Overall fastest</span><strong>{formatTime(overallFastest)}</strong></article>
         <article><span>Overall average</span><strong>{formatTime(overallAverage)}</strong></article>
@@ -73,6 +73,6 @@ export function GoiExperimentDashboard({ data }: { data: GoiExperimentLibrary })
           </article>
         ))}
       </section>
-    </main>
+    </div>
   );
 }

@@ -6,7 +6,7 @@ function formatRating(value: number | null) {
 }
 
 function displayDate(review: MovieReview) {
-  return review.watchedDateLabel ?? "No source date";
+  return review.watchedDateLabel ?? "Date not provided";
 }
 
 export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
@@ -20,7 +20,7 @@ export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
   ));
 
   return (
-    <main className="movies-page">
+    <div className="movies-page">
       <div className="movies-marquee">
         <Link href="/misc" className="movies-back"><span aria-hidden="true">←</span> MISC</Link>
         <div className="movies-bulbs" aria-hidden="true">{Array.from({ length: 22 }, (_, index) => <i key={index} />)}</div>
@@ -36,7 +36,7 @@ export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
         <article className="movies-feature-primary">
           <p>Now showing</p>
           <strong>{summary.highestRatedReview?.title ?? "No rated feature"}</strong>
-          <span>{summary.highestRatedReview ? `${formatRating(summary.highestRatedReview.rating)} source rating` : "Waiting for a review"}</span>
+          <span>{summary.highestRatedReview ? `${formatRating(summary.highestRatedReview.rating)} highest rating` : "Waiting for a review"}</span>
         </article>
         <div className="movies-ticket-stats">
           <article><span>Total admissions</span><strong>{summary.reviewCount}</strong></article>
@@ -48,7 +48,7 @@ export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
 
       {summary.yearlySummaries.length > 0 && (
         <section className="movies-year-strip" aria-label="Movie attendance by year">
-          <header><p>Annual attendance</p><span>Source-derived yearly totals</span></header>
+          <header><p>Annual attendance</p><span>Yearly totals</span></header>
           <div>
             {summary.yearlySummaries.map((year) => (
               <article key={year.year}>
@@ -68,7 +68,7 @@ export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
         <section className="movies-rating-board" aria-label="Rating distribution">
           <header><p>Rating board</p><span>1–10 distribution</span></header>
           {ratingReviews.length === 0 ? (
-            <div className="movies-empty">No rated features in the source.</div>
+            <div className="movies-empty">No rated features recorded.</div>
           ) : (
             <div className="movies-rating-bars">
               {Array.from({ length: 10 }, (_, index) => {
@@ -101,9 +101,9 @@ export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
       </div>
 
       <section className="movies-review-ledger" aria-label="Movie review ledger">
-        <header><p>Review ledger</p><span>{reviews.length} source records</span></header>
+        <header><p>Review ledger</p><span>{reviews.length} reviews</span></header>
         {reviews.length === 0 ? (
-          <div className="movies-empty movies-empty-wide">The theater is dark. No reviewed movies are in the source.</div>
+          <div className="movies-empty movies-empty-wide">The theater is dark. No reviewed movies are recorded.</div>
         ) : reviews.slice().reverse().map((review) => (
           <article key={review.id}>
             <div className="movies-review-title">
@@ -154,10 +154,14 @@ export function MoviesDashboard({ data }: { data: MoviesLibrary }) {
 
       {data.issues.length > 0 && (
         <details className="movies-source-issues">
-          <summary>Source notes ({data.issues.length})</summary>
-          <ul>{data.issues.map((issue, index) => <li key={`${issue.rowNumber}-${issue.field}-${index}`}><strong>{issue.tab} · row {issue.rowNumber} · {issue.field}</strong> {issue.message}</li>)}</ul>
+          <summary>Review notes ({data.issues.length})</summary>
+          <ul>
+            {data.issues.map((issue, index) => (
+              <li key={`${issue.field}-${index}`}><strong>{issue.field}</strong> {issue.message}</li>
+            ))}
+          </ul>
         </details>
       )}
-    </main>
+    </div>
   );
 }

@@ -16,7 +16,7 @@ export default async function AlbumsPage() {
   );
 
   return (
-    <main className="pt-6">
+    <div className="pt-6">
       <div className="max-w-2xl">
         <p className="text-sm font-medium text-amber-200">Albums: To Listen</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -31,6 +31,6 @@ export default async function AlbumsPage() {
       <MusicIssues issues={issues} />
       <AlbumPicker albums={albums} />
 
-    </main>
+    </div>
   );
 }

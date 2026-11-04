@@ -29,7 +29,7 @@ export function NetWorthDashboard({ model }: { model: NetWorthDashboardModel }) 
   return (
     <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Net worth</h1>
-      <p className="mt-2 max-w-xl text-muted-foreground">Historical net-worth values from the verified source block.</p>
+      <p className="mt-2 max-w-xl text-muted-foreground">A record of account balances and monthly net worth.</p>
       {model.latest ? (
         <>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">

@@ -14,13 +14,13 @@ export function MusicIssues({ issues }: { issues: readonly MusicIssue[] }) {
         Some playlist rows need attention
       </p>
       <p className="mt-1 text-amber-100/75">
-        {issues.length} row{issues.length === 1 ? "" : "s"} could not be fully
-        used. Available music is still shown.
+        {issues.length} entr{issues.length === 1 ? "y" : "ies"} could not be
+        fully used. Available music is still shown.
       </p>
       <ul className="mt-3 space-y-1 text-xs text-amber-100/65">
         {issues.slice(0, 3).map((issue) => (
           <li key={`${issue.tab}-${issue.rowNumber}-${issue.field}`}>
-            {issue.tab}, row {issue.rowNumber}: {issue.field} — {issue.message}
+            {issue.field} — {issue.message}
           </li>
         ))}
         {issues.length > 3 && <li>{issues.length - 3} additional row issues.</li>}

@@ -260,8 +260,8 @@ export function AlbumPicker({ albums }: { albums: readonly AlbumCandidate[] }) {
           <>
             <p className="text-sm font-medium">No albums to choose from yet</p>
             <p className="mt-2 text-sm text-muted-foreground">
-              The Albums: To Listen playlist has no usable album rows. Add
-              albums to that playlist and refresh the page.
+              The Albums to Listen list has no usable entries. Add albums
+              to the list and refresh the page.
             </p>
           </>
         )}

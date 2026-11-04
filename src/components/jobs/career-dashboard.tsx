@@ -111,7 +111,7 @@ export function CareerDashboard({ data }: { data: CareerLibrary }) {
   [data.jobs]);
 
   return (
-    <main className="jobs-record">
+    <div className="jobs-record">
       <Link href="/" className="jobs-back-link">
         <span aria-hidden="true">←</span> Life Dashboard
       </Link>
@@ -166,7 +166,7 @@ export function CareerDashboard({ data }: { data: CareerLibrary }) {
                   </dl>
                   {(job.notes || job.bonuses) && (
                     <details className="jobs-source-details">
-                      <summary>Source notes and bonuses</summary>
+                      <summary>Notes and bonuses</summary>
                       {job.notes && <p>{job.notes}</p>}
                       {job.bonuses && <p><strong>Bonuses:</strong> {job.bonuses}</p>}
                     </details>
@@ -220,6 +220,6 @@ export function CareerDashboard({ data }: { data: CareerLibrary }) {
 
         </aside>
       </div>
-    </main>
+    </div>
   );
 }

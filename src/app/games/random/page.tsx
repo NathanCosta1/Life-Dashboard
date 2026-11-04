@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function GamesRandomPage() {
   return (
-    <main className="games-random-index">
+    <div className="games-random-index">
       <Link href="/games" className="games-back-link"><span aria-hidden="true">←</span> Games directory</Link>
       <header className="games-random-header">
         <p>Random / 01</p>
@@ -23,6 +23,6 @@ export default function GamesRandomPage() {
         </div>
         <strong aria-hidden="true">→</strong>
       </Link>
-    </main>
+    </div>
   );
 }

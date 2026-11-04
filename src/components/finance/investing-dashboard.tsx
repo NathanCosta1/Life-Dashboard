@@ -221,7 +221,7 @@ export function InvestingDashboard({ model, emptyTabs }: { model: InvestmentDash
       ) : model.months.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed bg-card p-8">
           <p className="font-medium">No investment records are available.</p>
-          <p className="mt-2 text-sm text-muted-foreground">The connected investment tabs do not contain usable month rows.</p>
+          <p className="mt-2 text-sm text-muted-foreground">No usable monthly records are available.</p>
         </div>
       ) : (
         <>
@@ -269,7 +269,7 @@ export function InvestingDashboard({ model, emptyTabs }: { model: InvestmentDash
               <section className="mt-6">
                 <div className="rounded-xl border bg-card p-5">
                   <h2 className="font-medium">Prior contributions and new contributions</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">The source tracks previously accumulated contributions separately from this year&apos;s activity.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Previously accumulated contributions are separate from this year&apos;s activity.</p>
                   <div className="mt-6 space-y-4">
                     <div><div className="flex justify-between text-sm"><span>Prior contributions</span><span className="tabular-nums">{formatCurrency(model.startingBalanceTotal)}</span></div><div className="mt-2 h-3 rounded-full bg-muted"><div className="h-full rounded-full bg-violet-400" style={{ width: `${model.startingBalanceTotal > 0 ? 100 : 0}%` }} /></div></div>
                     <div><div className="flex justify-between text-sm"><span>New contributions</span><span className="tabular-nums">{formatCurrency(model.totalInvested)}</span></div><div className="mt-2 h-3 rounded-full bg-muted"><div className="h-full rounded-full bg-cyan-400" style={{ width: `${model.startingBalanceTotal > 0 ? Math.min(100, (model.totalInvested / model.startingBalanceTotal) * 100) : 100}%` }} /></div></div>
@@ -299,7 +299,7 @@ export function InvestingDashboard({ model, emptyTabs }: { model: InvestmentDash
                   <div className="mt-4 divide-y">
                     {selected.accounts.map((account) => <div key={account.account} className="flex justify-between py-3 text-sm"><span>{account.account}</span><span className="tabular-nums">{formatCurrency(account.amount)}</span></div>)}
                     <div className="flex justify-between py-3 text-sm font-medium"><span>Calculated total</span><span>{formatCurrency(selected.calculatedTotal)}</span></div>
-                    <div className="flex justify-between py-3 text-sm font-medium"><span>Sheet total</span><span>{formatCurrency(selected.providedTotal)}</span></div>
+                    <div className="flex justify-between py-3 text-sm font-medium"><span>Recorded total</span><span>{formatCurrency(selected.providedTotal)}</span></div>
                   </div>
                   {selected.startingBalances.length > 0 && (
                     <div className="mt-5 rounded-lg border border-dashed p-4">
@@ -314,7 +314,7 @@ export function InvestingDashboard({ model, emptyTabs }: { model: InvestmentDash
                       </div>
                     </div>
                   )}
-                  {!selected.totalMatchesAccounts && <p className="mt-4 rounded-lg border border-amber-400/40 bg-amber-400/10 p-3 text-xs text-amber-200">The sheet total differs from the account values. Review source row {selected.location.rowNumber}.</p>}
+                  {!selected.totalMatchesAccounts && <p className="mt-4 rounded-lg border border-amber-400/40 bg-amber-400/10 p-3 text-xs text-amber-200">The recorded total differs from the account values.</p>}
                 </>
               ) : <p className="mt-4 text-sm text-muted-foreground">No monthly records are available.</p>}
             </section>

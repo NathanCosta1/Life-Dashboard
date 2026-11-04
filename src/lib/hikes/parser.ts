@@ -21,6 +21,17 @@ function parseTime(value: string): number | null {
   return match ? Number(match[1]) * 60 + Number(match[2]) : null;
 }
 
+function parseElapsedTime(value: string): number | null {
+  const clock = parseTime(value);
+  if (clock !== null) return clock;
+
+  const prose = value.trim().match(/(?:(\d{1,3})\s*(?:hours?|hrs?|h)\s*)?(?:(\d{1,2})\s*(?:minutes?|mins?|m))?/i);
+  if (!prose || (!prose[1] && !prose[2])) return null;
+  const hours = Number(prose[1] ?? 0);
+  const minutes = Number(prose[2] ?? 0);
+  return hours * 60 + minutes;
+}
+
 export function parseHikeDate(value: string): { date: string; year: number | null } {
   const date = value.trim();
   const parts = date.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
@@ -158,7 +169,7 @@ export function parseHikingDocument(title: string | null, blocks: readonly HikeB
         current.elevationGainFeet = parseNumber(value);
       } else if (label === "time") {
         current.elapsedText = value;
-        current.elapsedMinutes = parseTime(value);
+        current.elapsedMinutes = parseElapsedTime(value);
         const ascent = value.match(/([0-5]?\d(?::[0-5]\d)?|\d+\s*(?:hr|hours?|mins?))\s*(?:min(?:ute)?s?)?\s*up/i);
         const descent = value.match(/([0-5]?\d(?::[0-5]\d)?|\d+\s*(?:hr|hours?|mins?))\s*(?:min(?:ute)?s?)?\s*down/i);
         if (ascent) current.ascentMinutes = parseTime(`${ascent[1].includes(":") ? ascent[1] : "0:" + ascent[1]}`);

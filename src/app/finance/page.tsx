@@ -27,7 +27,7 @@ const financeAreas = [
   },
   {
     title: "Vacations",
-    description: "Review trip spending from the semi-structured travel workbooks.",
+    description: "Review trip spending and travel history.",
     href: "/finance/vacations",
     status: "Available",
   },

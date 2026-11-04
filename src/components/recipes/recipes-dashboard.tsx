@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { chooseRandomMeal, filterMealIdeas } from "@/lib/recipes/parser";
 import type { MealIdea, RecipeCategory, RecipeLibrary } from "@/lib/recipes/types";
 
@@ -57,6 +58,9 @@ export function RecipesDashboard({ data }: { data: RecipeLibrary }) {
     <div className="recipes-theme">
       <header className="recipes-header">
         <div>
+          <Link className="recipes-back-link" href="/" aria-label="Back to Life Dashboard">
+            <span aria-hidden="true">←</span> Dashboard
+          </Link>
           <p className="recipes-kicker">Recipe index</p>
           <h1>Recipes &amp; meal ideas</h1>
         </div>
@@ -173,7 +177,7 @@ export function RecipesDashboard({ data }: { data: RecipeLibrary }) {
       >
         {selected && (
           <div>
-            <button type="button" className="recipes-dialog-close" aria-label="Close recipe details" onClick={closeDetails}>Close</button>
+            <button type="button" className="recipes-dialog-close" aria-label="Close recipe details" onClick={closeDetails} autoFocus>Close</button>
             <p>{selected.category}{selected.section ? ` / ${selected.section}` : ""}</p>
             <h2 id="recipe-dialog-title">{selected.name}</h2>
             {selected.note && <p className="recipes-dialog-note">{selected.note}</p>}
@@ -184,7 +188,16 @@ export function RecipesDashboard({ data }: { data: RecipeLibrary }) {
               {selected.needsRecipe && <span>Needs recipe details</span>}
               {selected.template && <span>Template</span>}
             </div>
-            {!selected.note && !selected.template && !selected.needsRecipe && <p className="recipes-dialog-status">Source name only</p>}
+            <section className="recipes-dialog-details" aria-label="Details">
+              <p>{selected.note ? "Notes recorded" : "No extra details recorded"}</p>
+              {selected.note ? (
+                <div className="recipes-dialog-note-block">{selected.note}</div>
+              ) : (
+                <p className="recipes-dialog-status">
+                  This document is a meal index. It does not include ingredients or preparation steps for this idea.
+                </p>
+              )}
+            </section>
           </div>
         )}
       </dialog>

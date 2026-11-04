@@ -1,18 +1,8 @@
 import Link from "next/link";
-import { loadGamesLibrary } from "@/lib/games/data";
 
-export async function GamesDirectory() {
-  let libraryCount = 0;
-  let libraryConnected = true;
-  try {
-    const library = await loadGamesLibrary();
-    libraryCount = library.digital.length + library.analog.length;
-  } catch {
-    libraryConnected = false;
-  }
-
+export function GamesDirectory() {
   return (
-    <main className="games-directory">
+    <div className="games-directory">
       <Link href="/" className="games-back-link"><span aria-hidden="true">←</span> Life Dashboard</Link>
       <header className="games-directory-header">
         <p>Gaming cabinet / directory</p>
@@ -21,7 +11,7 @@ export async function GamesDirectory() {
       <section className="games-directory-cabinet" aria-label="Games destinations">
         <Link href="/games/library" className="games-directory-library">
           <span className="games-directory-index">01</span>
-          <div><p>Digital + analog collection</p><h2>Library</h2><small>{libraryConnected ? `${libraryCount} titles` : "Source unavailable"}</small></div>
+          <div><p>Digital + analog collection</p><h2>Library</h2><small>Games collection</small></div>
           <strong aria-hidden="true">→</strong>
         </Link>
         <Link href="/games/cornhole" className="games-directory-cornhole">
@@ -35,10 +25,6 @@ export async function GamesDirectory() {
           <strong aria-hidden="true">→</strong>
         </Link>
       </section>
-      <footer className="games-directory-status">
-        <span>Library: {libraryConnected ? "connected" : "unavailable"}</span>
-        <span>Random: 1 project</span>
-      </footer>
-    </main>
+    </div>
   );
 }

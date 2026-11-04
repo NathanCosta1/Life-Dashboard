@@ -75,7 +75,7 @@ export function YearInReview({
   const [listName, setListName] = useState(defaultListName);
   const selectedList = yearLists.find((list) => list.name === listName) ?? yearLists[0];
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<"sheet" | "title" | "artist">("sheet");
+  const [sort, setSort] = useState<"source" | "title" | "artist">("source");
   const [page, setPage] = useState(0);
   const pageSize = 25;
 
@@ -158,7 +158,7 @@ export function YearInReview({
           <p className="mt-4 text-sm text-muted-foreground">
             {selectedTrackCount} saved track rows in <span className="text-foreground">{selectedList.name}</span>.
             {selectedList.kind === "replay"
-              ? " Replay lists are shown as exported; no chart ranks are present in the sheet."
+              ? " Replay lists are shown in playlist order; chart ranks are not available."
               : " This Everything playlist is kept separate from Replay for the same year."}
           </p>
         ) : (
@@ -186,7 +186,7 @@ export function YearInReview({
         />
         <Rankings
           title="Albums in the most lists"
-          description="Album titles are grouped by normalized title because album-artist is not in the source."
+          description="Album titles are grouped by normalized name."
           items={insights.recurringAlbums.slice(0, 5)}
           appearanceLabel="lists"
         />
@@ -203,7 +203,7 @@ export function YearInReview({
           <div>
             <h2 className="font-semibold">{selectedList?.name ?? `${year} playlist`}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Track order follows the exported sheet rows; no chart rank is available.
+              Track order follows the exported playlist; no chart rank is available.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-[minmax(14rem,1fr)_10rem]">
@@ -224,7 +224,7 @@ export function YearInReview({
                 onChange={(event) => setSort(event.target.value as typeof sort)}
                 className="rounded-lg border bg-background px-3 py-2.5 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
               >
-                <option value="sheet">Sheet order</option>
+                <option value="source">Library order</option>
                 <option value="title">Track title</option>
                 <option value="artist">Artist</option>
               </select>
@@ -240,7 +240,6 @@ export function YearInReview({
                   <th scope="col" className="px-5 py-3 font-medium">Track</th>
                   <th scope="col" className="px-5 py-3 font-medium">Credited artist</th>
                   <th scope="col" className="px-5 py-3 font-medium">Album</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Sheet row</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -249,7 +248,6 @@ export function YearInReview({
                     <td className="px-5 py-3.5 font-medium">{track.title}</td>
                     <td className="px-5 py-3.5 text-muted-foreground">{track.artist}</td>
                     <td className="px-5 py-3.5 text-muted-foreground">{track.album || "—"}</td>
-                    <td className="px-5 py-3.5 tabular-nums text-muted-foreground">{track.source.rowNumber}</td>
                   </tr>
                 ))}
               </tbody>

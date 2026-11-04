@@ -21,6 +21,26 @@ const documentBlocks: RecipeBlock[] = [
 ];
 
 describe("parseRecipeDocument", () => {
+  it("does not turn marker legends into recipe ideas", () => {
+    const library = parseRecipeDocument("Recipes", [
+      { style: "HEADING_1", text: "Main" },
+      { style: "NORMAL_TEXT", text: "❤️ = Maddy Favorite" },
+      { style: "NORMAL_TEXT", text: "💼 = Bring to work" },
+      { style: "NORMAL_TEXT", text: "Taco Salad❤️" },
+    ]);
+    expect(library.ideas.map((idea) => idea.name)).toEqual(["Taco Salad"]);
+    expect(library.ideas[0].maddyFavorite).toBe(true);
+  });
+
+  it("recognizes the self-breaded chicken source section", () => {
+    const library = parseRecipeDocument("Recipes", [
+      { style: "HEADING_1", text: "Main" },
+      { style: "NORMAL_TEXT", text: "Self-Breaded Chicken" },
+      { style: "NORMAL_TEXT", text: "Chicken dinner" },
+    ]);
+    expect(library.ideas.find((idea) => idea.name === "Chicken dinner")?.section).toBe("Self-Breaded Chicken");
+  });
+
   it("extracts markers and categories", () => {
     const library = parseRecipeDocument("Recipes / What to Eat?", documentBlocks);
     expect(library.ideas.find((idea) => idea.name === "Pizza Bagel/Tortilla/English Muffin")).toMatchObject({

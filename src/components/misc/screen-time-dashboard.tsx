@@ -50,7 +50,7 @@ function ScreenTimeTrend({ summary }: { summary: ScreenTimeSummary }) {
 
   return (
     <div className="screen-time-chart-wrap">
-      <svg className="screen-time-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${summary.owner} cumulative screen-time hours and source on-pace line`}>
+      <svg className="screen-time-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${summary.owner} cumulative screen-time hours and average pace line`}>
         {[0, 0.25, 0.5, 0.75, 1].map((fraction) => (
           <g key={fraction}>
             <line x1={left} x2={width - right} y1={top + innerHeight * fraction} y2={top + innerHeight * fraction} />
@@ -76,7 +76,7 @@ export function ScreenTimeDashboard({ data }: { data: ScreenTimeLibrary }) {
   const lowest = summary.lowestWeekAverage?.dailyAverageHours ?? null;
 
   return (
-    <main className="screen-time-page">
+    <div className="screen-time-page">
       <Link href="/misc" className="screen-time-back"><span aria-hidden="true">←</span> MISC</Link>
       <header className="screen-time-header">
         <div>
@@ -158,7 +158,7 @@ export function ScreenTimeDashboard({ data }: { data: ScreenTimeLibrary }) {
             <article key={`${day.sourceRowNumber}-${day.label}`}>
               <time>{day.label}</time>
               <strong>{formatHours(day.hours)} hr</strong>
-              {(day.note || day.imputed) && <small>{day.note ?? "Imputed source value"}</small>}
+              {(day.note || day.imputed) &&               <small>{day.note ?? "Estimated value"}</small>}
             </article>
           ))}
         </section>
@@ -166,12 +166,12 @@ export function ScreenTimeDashboard({ data }: { data: ScreenTimeLibrary }) {
 
       {data.issues.filter((issue) => issue.owner === summary.owner).length > 0 && (
         <section className="screen-time-issues">
-          <p>Source records needing review</p>
+          <p>Entries needing review</p>
           {data.issues.filter((issue) => issue.owner === summary.owner).map((issue) => (
-            <div key={`${issue.rowNumber}-${issue.field}`}>Row {issue.rowNumber}: {issue.message}</div>
+            <div key={`${issue.rowNumber}-${issue.field}`}>{issue.message}</div>
           ))}
         </section>
       )}
-    </main>
+    </div>
   );
 }

@@ -45,7 +45,7 @@ export function RacesDashboard({ data }: { data: RaceLibrary }) {
   const maxYearCount = Math.max(1, ...years.map((year) => year.count));
 
   return (
-    <main className="races-page">
+    <div className="races-page">
       <Link href="/fitness" className="races-back"><span aria-hidden="true">←</span> Fitness</Link>
 
       <header className="races-header">
@@ -111,7 +111,7 @@ export function RacesDashboard({ data }: { data: RaceLibrary }) {
         </section>
 
         <section className="races-distance-tally" aria-label="Race distance distribution">
-          <header><p>Distance tally</p><span>Source race names only</span></header>
+          <header><p>Distance tally</p><span>From recorded race names</span></header>
           {data.summary.racesByDistance.map((item) => (
             <article key={item.name}>
               <span>{item.label}</span>
@@ -132,7 +132,6 @@ export function RacesDashboard({ data }: { data: RaceLibrary }) {
         ) : visibleRaces.map((race) => (
           <article key={race.id} className={`races-record races-record-${race.status}`}>
             <div className="races-bib">
-              <span>#{race.sourceRowNumber.toString().padStart(3, "0")}</span>
               <strong>{race.distanceLabel ?? "Other"}</strong>
             </div>
             <div className="races-record-main">
@@ -177,14 +176,14 @@ export function RacesDashboard({ data }: { data: RaceLibrary }) {
 
       {data.issues.length > 0 && (
         <details className="races-issues">
-          <summary>Source records needing review ({data.issues.length})</summary>
+          <summary>Entries needing review ({data.issues.length})</summary>
           <ul>
             {data.issues.map((issue, index) => (
-              <li key={`${issue.rowNumber}-${issue.field}-${index}`}><strong>Row {issue.rowNumber} · {issue.field}</strong> {issue.message}</li>
+              <li key={`${issue.rowNumber}-${issue.field}-${index}`}><strong>{issue.field}</strong> {issue.message}</li>
             ))}
           </ul>
         </details>
       )}
-    </main>
+    </div>
   );
 }

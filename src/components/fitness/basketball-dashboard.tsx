@@ -13,7 +13,7 @@ export function BasketballDashboard({ data }: { data: BasketballLibrary }) {
   const drill = data.drills.find((item) => item.drill === selected) ?? data.drills[0];
 
   return (
-    <main className="basketball-page">
+    <div className="basketball-page">
       <Link href="/fitness" className="basketball-back"><span aria-hidden="true">←</span> Fitness</Link>
       <header className="basketball-header">
         <div><p>Training record / shooting</p><h1>Basketball</h1></div>
@@ -62,7 +62,7 @@ export function BasketballDashboard({ data }: { data: BasketballLibrary }) {
           </section>
         </>
       )}
-      {data.issues.length > 0 && <section className="basketball-issues"><p>Source records needing review</p>{data.issues.map((issue) => <div key={`${issue.rowNumber}-${issue.field}`}>Row {issue.rowNumber}: {issue.message}</div>)}</section>}
-    </main>
+      {data.issues.length > 0 && <section className="basketball-issues"><p>Entries needing review</p>{data.issues.map((issue) => <div key={`${issue.rowNumber}-${issue.field}`}>{issue.message}</div>)}</section>}
+    </div>
   );
 }

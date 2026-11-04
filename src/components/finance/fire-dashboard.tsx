@@ -304,7 +304,7 @@ export function FireDashboard({ model }: { model: FireDashboardModel }) {
     <section className="mt-8 grid gap-4 lg:grid-cols-[280px_1fr]">
       <div className="rounded-xl border bg-card p-5">
         <h2 className="font-medium">Your assumptions</h2>
-        <p className="mt-1 text-xs leading-5 text-muted-foreground">These stay local to this calculator and never change your source sheets.</p>
+        <p className="mt-1 text-xs leading-5 text-muted-foreground">These settings stay local to this calculator.</p>
         <div className="mt-5 space-y-4">
           <InputField label="Investable portfolio" value={inputs.startingPortfolio} onChange={update("startingPortfolio")} />
           <div className="flex items-center justify-between gap-3"><p className="text-sm font-medium">Cash flow assumptions</p><div className="flex rounded-lg border bg-muted/30 p-0.5 text-xs">{["Annual", "Monthly"].map((period) => <button key={period} type="button" onClick={() => setShowMonthlyValues(period === "Monthly")} className={`rounded-md px-2.5 py-1 transition-colors ${showMonthlyValues === (period === "Monthly") ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>{period}</button>)}</div></div>

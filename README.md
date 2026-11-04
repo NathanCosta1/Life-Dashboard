@@ -14,6 +14,17 @@ Share each spreadsheet with the service account email as a Viewer. The helper ac
 a spreadsheet ID and A1 range, maps the first row to field names, and lets callers
 parse each row into a typed value. Reads are cached for one hour by default.
 
+The optional Secret vault has two server-only settings. Set both values in `.env.local`
+and never reuse the session secret as a public value:
+
+```text
+SECRET_VAULT_PIN=1234
+SECRET_VAULT_SESSION_SECRET=a-long-random-server-side-secret
+```
+
+Without both values the vault remains locked. The `inspect:secret` command reports
+tab dimensions only and intentionally does not print source values.
+
 The Finance integration should use stable spreadsheet IDs and named ranges or
 sheet tabs rather than relying on a Google Drive folder path. Moving a sheet
 within Drive does not change its spreadsheet ID. Renaming a tab or changing

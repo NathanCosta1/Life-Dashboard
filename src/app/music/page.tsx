@@ -16,6 +16,9 @@ const musicAreas = [
 export default function MusicPage() {
   return (
     <div className="min-h-screen px-6 py-8 sm:px-10 lg:px-12">
+      <Link className="mb-5 inline-flex items-center gap-2 text-xs font-bold tracking-[0.08em] text-muted-foreground uppercase hover:text-[#f2b66f]" href="/" aria-label="Back to Life Dashboard">
+        <span aria-hidden="true">←</span> Dashboard
+      </Link>
       <p className="text-sm font-medium tracking-[0.18em] text-[#f2b66f] uppercase">Music</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Music</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">

@@ -51,7 +51,9 @@ function ScenarioInput({
   suffix: string;
 }) {
   const [draft, setDraft] = useState(String(Math.round(value * 100) / 100));
+  const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const errorId = `${label.replace(/\s+/g, "-").toLowerCase()}-scenario-error`;
 
   useEffect(() => {
     if (document.activeElement !== inputRef.current) {
@@ -60,7 +62,17 @@ function ScenarioInput({
   }, [value]);
 
   const commit = () => {
-    const numValue = Math.max(0, Number(draft) || 0);
+    const normalized = draft.trim();
+    if (!/^(?:\d+\.?\d*|\.\d+)$/.test(normalized)) {
+      setError("Enter a number of zero or greater.");
+      return;
+    }
+    const numValue = Number(normalized);
+    if (!Number.isFinite(numValue) || numValue < 0) {
+      setError("Enter a number of zero or greater.");
+      return;
+    }
+    setError("");
     onChange(numValue);
     setDraft(String(Math.round(numValue * 100) / 100));
   };
@@ -74,7 +86,12 @@ function ScenarioInput({
         type="text"
         inputMode="decimal"
         value={draft}
-        onChange={(event) => setDraft(event.target.value)}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={error ? errorId : undefined}
+        onChange={(event) => {
+          setDraft(event.target.value);
+          if (error) setError("");
+        }}
         onBlur={commit}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
@@ -85,6 +102,7 @@ function ScenarioInput({
         }}
       />
       <span className="w-12 text-xs text-muted-foreground">{suffix}</span>
+      {error && <span id={errorId} role="alert" className="text-xs text-rose-300">{error}</span>}
     </div>
   );
 }

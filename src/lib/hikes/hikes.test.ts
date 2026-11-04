@@ -63,6 +63,15 @@ describe("parseHikingDocument", () => {
     expect(sparse.location).toBe("Greenwood, ME");
   });
 
+  it("parses prose elapsed durations without inventing missing values", () => {
+    const library = parseHikingDocument("Hikes", [
+      { style: "NORMAL_TEXT", text: "40) Prose Time Hike" },
+      { style: "NORMAL_TEXT", text: "Time: 3 hours 20 minutes" },
+    ]);
+    expect(library.hikes[0].elapsedMinutes).toBe(200);
+    expect(library.hikes[0].elapsedText).toBe("3 hours 20 minutes");
+  });
+
   it("extracts states and handles duplicate or empty input safely", () => {
     expect(extractState("Pendleton County, WV")).toBe("West Virginia");
     expect(extractState("Livermore, NH")).toBe("New Hampshire");

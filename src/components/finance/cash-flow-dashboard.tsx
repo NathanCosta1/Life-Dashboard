@@ -42,7 +42,7 @@ export function CashFlowDashboard({ model }: { model: CashFlowDashboardModel }) 
             <div className="mt-4 divide-y">{model.years.map((row) => <div key={row.year} className="grid gap-2 py-4 text-sm sm:grid-cols-5 sm:items-center"><span className="font-medium">{row.year}</span><span className="text-muted-foreground">Income <strong className="ml-1 font-medium text-foreground">{valueLabel(row.income?.value ?? null)}</strong></span><span className="text-muted-foreground">Expenses <strong className="ml-1 font-medium text-foreground">{valueLabel(row.expenses?.value ?? null)}</strong></span><span className="text-muted-foreground">Savings <strong className="ml-1 font-medium text-foreground">{formatCurrency(row.savings)}</strong></span><span className="text-muted-foreground">Rate <strong className="ml-1 font-medium text-foreground">{row.savingsRate === null ? "—" : percent.format(row.savingsRate)}</strong></span></div>)}</div>
           </section>
         </>
-      ) : <div className="mt-8 rounded-xl border border-dashed bg-card p-8"><p className="font-medium">No income or expense records are available.</p><p className="mt-2 text-sm text-muted-foreground">The connected annual datasets do not contain usable records yet.</p></div>}
+      ) : <div className="mt-8 rounded-xl border border-dashed bg-card p-8"><p className="font-medium">No income or expense records are available.</p><p className="mt-2 text-sm text-muted-foreground">No usable annual records are available yet.</p></div>}
     </div>
   );
 }

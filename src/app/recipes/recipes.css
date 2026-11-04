@@ -35,6 +35,21 @@
   letter-spacing: -0.055em;
 }
 
+.recipes-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: #6f6653;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.recipes-back-link:hover,
+.recipes-back-link:focus-visible { color: #a24832; }
+
 .recipes-picker {
   min-height: 165px;
   display: flex;
@@ -287,6 +302,25 @@
 }
 .recipes-dialog-note { margin-top: 14px; color: #68604d; line-height: 1.55; }
 .recipes-dialog-status { margin-top: 18px; color: #887c60; font-size: 12px; }
+.recipes-dialog-details {
+  margin-top: 18px;
+  border-top: 1px solid #ddd2b6;
+  padding-top: 14px;
+}
+.recipes-dialog-details > p:first-child {
+  color: #887c60;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.recipes-dialog-note-block {
+  margin-top: 8px;
+  border-left: 3px solid #d5a849;
+  padding: 4px 0 4px 12px;
+  color: #68604d;
+  line-height: 1.55;
+}
 
 .recipes-loading { padding: 38px clamp(18px, 4vw, 52px); background: #f1eadc; min-height: 100vh; }
 .recipes-loading-title { width: 62%; height: 74px; background: #ded5c0; }
@@ -328,4 +362,3 @@
   .recipes-grid { grid-template-columns: 1fr; }
   .recipes-loading-counts, .recipes-loading-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-

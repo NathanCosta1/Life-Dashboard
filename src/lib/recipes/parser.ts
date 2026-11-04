@@ -74,6 +74,7 @@ export function parseRecipeDocument(title: string | null, blocks: readonly Recip
     "mediterranean", "(non-egg) breakfast-y meals", "pasta", "fish", "rice & beans",
     "meatloaf", "nachos", "cloud bread", "vegetables", "fruit", "asian",
     "cookies", "need to create",
+    "self-breaded chicken",
   ]);
 
   for (let index = 0; index < blocks.length; index += 1) {
